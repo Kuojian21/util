@@ -32,7 +32,8 @@ public class CipherTool {
 		}
 	}
 
-	private static ConcurrentMap<String,Cipher> ciphers = Maps.newConcurrentMap();
+	private static ConcurrentMap<String,Cipher> ciphers_1 = Maps.newConcurrentMap();
+	private static ConcurrentMap<String,Cipher> ciphers_2 = Maps.newConcurrentMap();
 	
 	private static String key(){
 		return null;
