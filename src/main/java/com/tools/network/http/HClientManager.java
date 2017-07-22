@@ -33,21 +33,22 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-public final class HttpClientFlyWeight {
-	
+public final class HClientManager {
+
 	private static class VerifyHolder {
-		private static final HttpClientFlyWeight holder = new HttpClientFlyWeight(true);
+		private static final HClientManager holder = new HClientManager(true);
 	}
-	
-	private static class NotVerifyHolder{
-		private static final HttpClientFlyWeight holder = new HttpClientFlyWeight(false);
+
+	private static class NotVerifyHolder {
+		private static final HClientManager holder = new HClientManager(false);
 	}
 
 	private PoolingHttpClientConnectionManager connectionManager;
 
-	private HttpClientFlyWeight(boolean verify) {
+	private HClientManager(boolean verify) {
 		try {
 			Registry<ConnectionSocketFactory> registry = null;
 
@@ -97,59 +98,41 @@ public final class HttpClientFlyWeight {
 		}
 	}
 
-	public static HttpClientFlyWeight getInstance(boolean verify) {
-		if(verify){
+	public static HClientManager getInstance(boolean verify) {
+		if (verify) {
 			return VerifyHolder.holder;
 		}
 		return NotVerifyHolder.holder;
 	}
 
-	public CloseableHttpClient getClient(Site site) {
-		if (site == null) {
-			return generateClient(Site.createDefault());
-		}
-		return generateClient(site);
-	}
-
-	private CloseableHttpClient generateClient(Site site) {
+	public CloseableHttpClient client(Site site) {
 		HttpClientBuilder httpClientBuilder = HttpClients.custom().setConnectionManager(
 				connectionManager);
-		if (site != null && site.getUserAgent() != null) {
+		
+		if (Strings.isNullOrEmpty(site.getUserAgent())) {
 			httpClientBuilder.setUserAgent(site.getUserAgent());
 		} else {
 			httpClientBuilder.setUserAgent("");
 		}
-		if (site == null || site.isUseGzip()) {
-			httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
 
+		if (site.isUseGzip()) {
+			httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
 				public void process(final HttpRequest request, final HttpContext context)
 						throws HttpException, IOException {
 					if (!request.containsHeader("Accept-Encoding")) {
 						request.addHeader("Accept-Encoding", "gzip");
 					}
-
 				}
 			});
 		}
-		int soTimeout = CommonConstant.URL_SO_TIME_OUT;
-		if (null != site) {
-			soTimeout = site.getTimeOut();
-		}
 
 		SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true)
-				.setSoTimeout(soTimeout).build();
+				.setSoTimeout(site.getTimeOut()).build();
 		httpClientBuilder.setDefaultSocketConfig(socketConfig);
-		if (site != null) {
-			httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site
-					.getRetryTimes(), true));
-		}
-		if (null != site) {
-			generateCookie(httpClientBuilder, site);
-		}
-		return httpClientBuilder.build();
-	}
 
-	private void generateCookie(HttpClientBuilder httpClientBuilder, Site site) {
+		httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(),
+				true));
+
 		CookieStore cookieStore = new BasicCookieStore();
 		for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
 			BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(),
@@ -166,24 +149,23 @@ public final class HttpClientFlyWeight {
 			}
 		}
 		httpClientBuilder.setDefaultCookieStore(cookieStore);
+
+		return httpClientBuilder.build();
 	}
 
-	/**
-	 * 
-	 * 提供连接池的统计信息 注意： 必须首先存在连接池的实例
-	 *
-	 * @return
-	 *
-	 *         2015年7月14日/下午9:10:42 mailto:"cuixiang"<cuixiang@corp.netease.com>
-	 */
 	public static String stats() {
+
+		PoolingHttpClientConnectionManager[] managers = new PoolingHttpClientConnectionManager[] {
+				VerifyHolder.holder.connectionManager, NotVerifyHolder.holder.connectionManager };
 		StringBuilder sb = new StringBuilder();
-		sb.append("total:").append(instance.connectionManager.getTotalStats().toString())
-				.append("---[");
-		for (HttpRoute route : instance.connectionManager.getRoutes()) {
-			sb.append(instance.connectionManager.getStats(route).toString()).append("||");
+		
+		for(PoolingHttpClientConnectionManager manager : managers){
+			sb.append("total:").append(manager.getTotalStats().toString()).append("\n");
+			for(HttpRoute route : manager.getRoutes()){
+				sb.append("\t").append(manager.getStats(route).toString()).append("\n");
+			}
 		}
-		sb.append("]");
+
 		return sb.toString();
 	}
 

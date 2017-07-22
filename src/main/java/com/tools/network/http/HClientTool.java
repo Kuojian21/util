@@ -25,10 +25,10 @@ import com.netease.payment.constant.CommonConstant;
 import com.netease.payment.constant.LogConstant;
 import com.netease.payment.util.http.HttpClientGenerator;
 @Repository
-public class HttpClientTool {
+public class HClientTool {
     
     private static Logger logger = LogConstant.runLog;
-    private static HttpClientFlyWeight httpClientGenerator = HttpClientFlyWeight.getInstance(2048, 100);
+    private static HClientManager httpClientGenerator = HClientManager.getInstance(2048, 100);
     private static final ContentType FORM_CONTENT_TYPE_UTF_8 = ContentType.create("application/x-www-form-urlencoded", Charsets.UTF_8);
     
     
