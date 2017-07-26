@@ -1,5 +1,7 @@
 package com.tools.secret;
-
+/**
+ * http://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html 
+ */
 public enum Transformation {
 	AES_CBC_NoPadding_128("AES", "CBC", "NoPadding", 128),
 	AES_CBC_PKCS5Padding_128("AES", "CBC", "PKCS5Padding", 128),

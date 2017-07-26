@@ -11,7 +11,8 @@ import java.security.spec.AlgorithmParameterSpec;
 public class KeyPairGeneratorTool {
 
 	public enum ALGORITHM {
-		DiffieHellman("DiffieHellman", 1024), DSA("DSA", 1024), RSA_1024("RSA", 1024), RSA_2048("RSA", 2048);
+		DiffieHellman("DiffieHellman", 1024), DSA("DSA", 1024), RSA_1024("RSA", 1024), RSA_2048(
+				"RSA", 2048);
 		private ALGORITHM(String name, int keysize) {
 			this.name = name;
 			this.keysize = keysize;
@@ -29,12 +30,10 @@ public class KeyPairGeneratorTool {
 		}
 
 	}
-	
-	
+
 	public static KeyPair key(KeyPairGenerator kgen) {
 		return kgen.generateKeyPair();
 	}
-	
 
 	public static KeyPairGenerator keyPairGenerator(ALGORITHM algorithm, String provider,
 			AlgorithmParameterSpec params, SecureRandom random) {
@@ -42,13 +41,14 @@ public class KeyPairGeneratorTool {
 			KeyPairGenerator kgen = KeyPairGenerator.getInstance(algorithm.getName(), provider);
 			kgen.initialize(params, random);
 			return kgen;
-		} catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+		} catch (NoSuchAlgorithmException | NoSuchProviderException
+				| InvalidAlgorithmParameterException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static KeyPairGenerator keyPairGenerator(ALGORITHM algorithm, String provider, int keysize,
+	public static KeyPairGenerator keyPairGenerator(ALGORITHM algorithm, String provider,
 			SecureRandom random) throws Exception {
 		try {
 			KeyPairGenerator kgen = KeyPairGenerator.getInstance(algorithm.getName(), provider);
