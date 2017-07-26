@@ -1,27 +1,16 @@
 package com.tools.secret;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
+
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
@@ -30,8 +19,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import com.itextpdf.text.pdf.codec.Base64;
-import com.tools.io.IOTool;
 
 public class CipherTool {
 
@@ -41,6 +28,37 @@ public class CipherTool {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public enum TRANSFORMATION {
+		AES_CBC_NoPadding_128("AESCBC/NoPadding", 128), 
+		AES_CBC_PKCS5Padding_128("AES/CBC/PKCS5Padding", 128), 
+		AES_ECB_NoPadding_128(
+				"AES/ECB/NoPadding", 128), 
+				AES_ECB_PKCS5Padding_128("AES/ECB/PKCS5Padding", 128), DES_CBC_NoPadding_56(
+				"DES/CBC/NoPadding", 56), DES_CBC_PKCS5Padding_56("DES/CBC/PKCS5Padding", 56), DES_ECB_NoPadding_56(
+				"DES/ECB/NoPadding", 56), DES_ECB_PKCS5Padding_56("DES/ECB/PKCS5Padding", 56), DESede_CBC_NoPadding_168(
+				"DESede/CBC/NoPadding", 168), DESede_CBC_PKCS5Padding_168("DESede/CBC/PKCS5Padding", 168), DESede_ECB_NoPadding_168(
+				"DESede/ECB/NoPadding", 168), DESede_ECB_PKCS5Padding_168("DESede/ECB/PKCS5Padding", 168), RSA_ECB_PKCS1Padding_1024(
+				"RSA/ECB/PKCS1Padding", 1024), RSA_ECB_OAEPWithSHA_1AndMGF1Padding_1024(
+				"RSA/ECB/OAEPWithSHA-1AndMGF1Padding", 1024), RSA_ECB_OAEPWithSHA_256AndMGF1Padding_1024(
+				"RSA/ECB/OAEPWithSHA-256AndMGF1Padding", 1024), RSA_ECB_PKCS1Padding_2048("RSA/ECB/PKCS1Padding", 2048), RSA_ECB_OAEPWithSHA_1AndMGF1Padding_2048(
+				"RSA/ECB/OAEPWithSHA-1AndMGF1Padding", 2048), RSA_ECB_OAEPWithSHA_256AndMGF1Padding_2048(
+				"RSA/ECB/OAEPWithSHA-256AndMGF1Padding", 2048);
+
+		private TRANSFORMATION(String name, int keysize) {
+			this.name = name;
+			this.keysize = keysize;
+		}
+		private final String name;
+		private final int keysize;
+		public String getName() {
+			return name;
+		}
+		public int getKeysize() {
+			return keysize;
+		}
+		
 	}
 
 	public static Cipher cipher(String transformation, String provider, int mode, Certificate certificate,
@@ -164,108 +182,6 @@ public class CipherTool {
 		return kgen.generateKey();
 	}
 
-	public PublicKey publicKey(KeyFactory keyFactory,byte[] key) {
-		try {
-			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
-			return keyFactory.generatePublic(keySpec);
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
-			return null;
-		} 
-	}
-	
-	public PrivateKey privateKey(KeyFactory keyFactory,byte[] key) {
-		try {
-			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(key);
-			return keyFactory.generatePrivate(keySpec);
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
-			return null;
-		} 
-	}
-	
-	public KeyFactory keyFactory(String algorithm, String provider){
-		try {
-			return KeyFactory.getInstance(algorithm,provider);
-		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static KeyPair key(KeyPairGenerator kgen) {
-		return kgen.generateKeyPair();
-	}
-
-	public byte[] loadKey(Reader reader) {
-		try {
-			BufferedReader br = IOTool.buffer(reader);
-			StringBuilder sb = new StringBuilder();
-			String readLine = null;
-			while ((readLine = br.readLine()) != null) {
-				if (readLine.charAt(0) == '-') {
-					continue;
-				} else {
-					sb.append(readLine);
-					sb.append('\r');
-				}
-			}
-			return Base64.decode(sb.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			IOTool.close(reader);
-		}
-	}
-
-	public static KeyGenerator keyGenerator(String algorithm, String provider, AlgorithmParameterSpec params,
-			SecureRandom random) {
-		try {
-			KeyGenerator kgen = KeyGenerator.getInstance(algorithm, provider);
-			kgen.init(params, random);
-			return kgen;
-		} catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	public static KeyGenerator keyGenerator(String algorithm, String provider, int keysize, SecureRandom random) {
-		try {
-			KeyGenerator kgen = KeyGenerator.getInstance(algorithm, provider);
-			kgen.init(keysize, random);
-			return kgen;
-		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static KeyPairGenerator keyPairGenerator(String algorithm, String provider, AlgorithmParameterSpec params,
-			SecureRandom random) {
-		try {
-			KeyPairGenerator kgen = KeyPairGenerator.getInstance(algorithm, provider);
-			kgen.initialize(params, random);
-			return kgen;
-		} catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static KeyPairGenerator keyPairGenerator(String algorithm, String provider, int keysize, SecureRandom random)
-			throws Exception {
-		try {
-			KeyPairGenerator kgen = KeyPairGenerator.getInstance(algorithm, provider);
-			kgen.initialize(keysize, random);
-			return kgen;
-		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	public static AlgorithmParameterSpec ivSpec(byte[] iv) {
 		return new IvParameterSpec(iv);
