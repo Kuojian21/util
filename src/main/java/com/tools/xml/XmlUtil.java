@@ -1,7 +1,6 @@
-package com.netease.common.util;
+package com.tools.xml;
 
 import java.io.IOException;
-
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -30,6 +29,10 @@ import org.dom4j.io.XMLWriter;
 import org.dom4j.tree.DefaultAttribute;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
+
+import com.netease.common.util.CodecUtil;
+import com.netease.common.util.LogUtil;
+import com.netease.common.util.StringUtil;
 
 /**
  * map <-> xml转换工具，提供如下接口：<br/>

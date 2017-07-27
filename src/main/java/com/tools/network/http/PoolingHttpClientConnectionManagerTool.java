@@ -16,6 +16,7 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.config.SocketConfig;
@@ -120,6 +121,27 @@ public final class PoolingHttpClientConnectionManagerTool {
 
 		return httpClientBuilder.build();
 
+	}
+	
+	public static SocketConfig defaultSocketConfig(){
+		return SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true)
+		.setSoTimeout(20000).build();
+	} 
+	
+	public static HttpRequestInterceptor defaultHttpRequestInterceptor(){
+		return new  HttpRequestInterceptor() {
+			public void process(final HttpRequest request, final HttpContext context)
+					throws HttpException, IOException {
+				if (!request.containsHeader("Accept-Encoding")) {
+					request.addHeader("Accept-Encoding", "gzip");
+				}
+			}
+		};
+	}
+	
+	public static HttpRequestRetryHandler defaultHttpRequestRetryHandler(){
+		return new DefaultHttpRequestRetryHandler(1,
+				true);
 	}
 	
 	public static String stats(PoolingHttpClientConnectionManager manager) {

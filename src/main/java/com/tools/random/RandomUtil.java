@@ -1,4 +1,4 @@
-package com.netease.common.util;
+package com.tools.random;
 
 /* 
  * Licensed to the Apache Software Foundation (ASF) under one

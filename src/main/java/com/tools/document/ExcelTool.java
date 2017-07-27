@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.tools.io.IOTool;
 import com.tools.logger.LogConstant;
 
-public class ExcelUtil {
+public class ExcelTool {
 
 	public static XSSFWorkbook empty() {
 		return new XSSFWorkbook();
@@ -25,8 +25,7 @@ public class ExcelUtil {
 		return new XSSFWorkbook(is);
 	}
 
-	public static void write(XSSFWorkbook workbook, OutputStream os, List<List<String>> datas, boolean wc,
-			boolean oc) {
+	public static void write(XSSFWorkbook workbook, OutputStream os, List<List<String>> datas) {
 		String module = "写入";
 		try {
 			XSSFSheet sheet = workbook.createSheet("sheet0");
@@ -52,17 +51,13 @@ public class ExcelUtil {
 		} catch (IOException e) {
 			LogConstant.runLog.error(module, "异常", e);
 		} finally {
-			if (wc) {
-				close(workbook);
-			}
-			if (oc) {
-				IOTool.close(os);
-			}
+			close(workbook);
+			IOTool.close(os);
 		}
 
 	}
 
-	public static List<List<Object>> read(XSSFWorkbook workbook, int index, boolean wbclose) {
+	public static List<List<Object>> read(XSSFWorkbook workbook, int index) {
 		List<List<Object>> datas = new ArrayList<List<Object>>();
 
 		try {
@@ -92,9 +87,7 @@ public class ExcelUtil {
 			}
 			return datas;
 		} finally {
-			if (wbclose) {
-				close(workbook);
-			}
+			close(workbook);
 		}
 
 	}
