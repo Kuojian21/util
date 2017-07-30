@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import com.tools.io.InputStreamUtil;
+import com.tools.io.IOTool;
 import com.tools.network.JschUtil;
 
 public class JschUtilTest {
@@ -13,7 +13,7 @@ public class JschUtilTest {
 	public void upload1() {
 		for (int i = 0; i < 10; i++) {
 			JschUtil.uploadSftp(JschUtil.sftp("trans.kaifae.com", 2022, "LMLC", "9X9XWa$f"),
-					InputStreamUtil.bytesToInputStream(new String("Hello World!").getBytes()),
+					IOTool.toInputStream(new String("Hello World!").getBytes()),
 					"/upload/test", "test" + i + ".txt", true, true);
 		}
 
@@ -24,7 +24,7 @@ public class JschUtilTest {
 		JschUtil.uploadSftp(JschUtil.sftp("123.57.157.2", 22, "lmlctest",
 				"SPLIT_classes:classes/exchange_njjjs.pub",
 				"SPLIT_classes:classes/exchange_njjjs.ppk", "njjjs".getBytes("UTF-8")),
-				InputStreamUtil.bytesToInputStream(new String("Hello World!123").getBytes()),
+				IOTool.toInputStream(new String("Hello World!123").getBytes()),
 				"upload", "test.txt", true, true);
 	}
 

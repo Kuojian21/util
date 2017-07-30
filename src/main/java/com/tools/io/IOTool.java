@@ -4,10 +4,15 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import com.tools.logger.LogConstant;
@@ -84,6 +89,26 @@ public class IOTool {
 	public static InputStream toInputStream(byte[] bytes){
 		return new ByteArrayInputStream(bytes);
 	}
+	
+	public static InputStream toInputStream(File file){
+		try {
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Reader toReader(InputStream in,String charset){
+		try {
+			return new InputStreamReader(in,charset);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 	
 
 }

@@ -67,7 +67,7 @@ public class CloseableHttpClientTool {
 					.setConnectionRequestTimeout(connectTimeOut).setSocketTimeout(readTimeOut)
 					.setConnectTimeout(connectTimeOut).build();
 			httpGet.setConfig(requestConfig);
-			httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			httpGet.setHeader("Content-NODE_TYPE", "application/x-www-form-urlencoded;charset=UTF-8");
 			response = client.execute(httpGet);
 			return EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
 		} catch (ParseException | IOException e) {

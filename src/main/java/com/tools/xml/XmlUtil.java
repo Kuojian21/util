@@ -2,11 +2,13 @@ package com.tools.xml;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,9 +32,8 @@ import org.dom4j.tree.DefaultAttribute;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 
-import com.netease.common.util.CodecUtil;
-import com.netease.common.util.LogUtil;
-import com.netease.common.util.StringUtil;
+import com.tools.common.StringTool;
+
 
 /**
  * map <-> xml转换工具，提供如下接口：<br/>
@@ -703,7 +704,6 @@ public class XmlUtil {
 				classObject = classObject.getSuperclass();
 			} while (null != classObject);
 		} catch (Exception e) {
-			LogUtil.error("Parse form param error:", e);
 			return "error";
 		}
 
@@ -741,15 +741,10 @@ class Persistent {
 		try {
 			ret = XmlUtil.objectToMap(this);
 		} catch (SecurityException e) {
-			LogUtil.error(this.getClass().getName() + "toMap():", e);
 		} catch (IllegalArgumentException e) {
-			LogUtil.error(this.getClass().getName() + "toMap():", e);
 		} catch (NoSuchMethodException e) {
-			LogUtil.error(this.getClass().getName() + "toMap():", e);
 		} catch (IllegalAccessException e) {
-			LogUtil.error(this.getClass().getName() + "toMap():", e);
 		} catch (InvocationTargetException e) {
-			LogUtil.error(this.getClass().getName() + "toMap():", e);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -776,6 +771,9 @@ class Persistent {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return ret;
@@ -798,8 +796,9 @@ class Formatter {
 	 * @throws InvocationTargetException 
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
+	 * @throws UnsupportedEncodingException 
 	 */
-	public static String objectToHttpParam(Object object,boolean isRemoveNull) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public static String objectToHttpParam(Object object,boolean isRemoveNull) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException{
 		Field[] fieldArray = object.getClass().getDeclaredFields();
 		String result = "?";//返回值
 		
@@ -833,13 +832,13 @@ class Formatter {
 			}
 			fieldValue = fieldObject.toString();
 			
-			if(isRemoveNull&&StringUtil.isEmpty(fieldValue)){
+			if(isRemoveNull&&StringTool.isEmpty(fieldValue)){
 				continue;
 			}else{
 				//拼接url参数
 				result += fieldArray[i].getName().toLowerCase();
 				result += "=";
-				result += CodecUtil.urlEncode(fieldValue, "GBK");
+				result += URLEncoder.encode(fieldValue, "GBK");
 				result += "&";
 			}
 			
@@ -850,7 +849,7 @@ class Formatter {
 		
 		return result;
 	}
-	public static String objectToHttpParam(Object object) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public static String objectToHttpParam(Object object) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException{
 		return objectToHttpParam(object,false);
 	}
 
