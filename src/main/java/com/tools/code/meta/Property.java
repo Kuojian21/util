@@ -8,25 +8,21 @@ public class Property {
 	public String getColumnName() {
 		return columnName;
 	}
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
-	}
 	public String getColumnType() {
 		return columnType;
-	}
-	public void setColumnType(String columnType) {
-		this.columnType = columnType;
 	}
 	public String getPropertyName() {
 		return propertyName;
 	}
-	public void setPropertyName(String propertyName) {
-		this.propertyName = propertyName;
-	}
 	public String getPropertyType() {
 		return propertyType;
 	}
-	public void setPropertyType(String propertyType) {
+	public void setColumn(String columnName,String columnType) {
+		this.columnName = columnName;
+		this.columnType = columnType;
+	}
+	public void setProperty(String propertyName,String propertyType) {
+		this.propertyName = propertyName;
 		this.propertyType = propertyType;
 	}
 }
