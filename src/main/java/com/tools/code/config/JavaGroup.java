@@ -1,12 +1,13 @@
 package com.tools.code.config;
 
 
-public class ConfigBuilder {
 
-	public final static Config MODEL = new Config(){
+public class JavaGroup implements Group{
+
+	public final static Type MODEL = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/model.tpl";
+			return "/velocity/template/javacode/model.tpl";
 		}
 
 		@Override
@@ -21,10 +22,10 @@ public class ConfigBuilder {
 		
 	};
 	
-	public final static Config DAO = new Config(){
+	public final static Type DAO = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/dao.tpl";
+			return "/velocity/template/javacode/dao.tpl";
 		}
 
 		@Override
@@ -40,10 +41,10 @@ public class ConfigBuilder {
 
 	};
 	
-	public final static Config DAO_IMPL = new Config(){
+	public final static Type DAO_IMPL = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/dao_impl.tpl";
+			return "/velocity/template/javacode/dao_impl.tpl";
 		}
 
 		@Override
@@ -59,10 +60,10 @@ public class ConfigBuilder {
 
 	};
 	
-	public final static Config SERVICE = new Config(){
+	public final static Type SERVICE = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/service.tpl";
+			return "/velocity/template/javacode/service.tpl";
 		}
 
 		@Override
@@ -77,10 +78,10 @@ public class ConfigBuilder {
 		
 	};
 	
-	public final static Config SERVICE_IMPL = new Config(){
+	public final static Type SERVICE_IMPL = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/service_impl.tpl";
+			return "/velocity/template/javacode/service_impl.tpl";
 		}
 
 		@Override
@@ -95,10 +96,10 @@ public class ConfigBuilder {
 		
 	};
 	
-	public final static Config CONTROLLER = new Config(){
+	public final static Type CONTROLLER = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/controller.tpl";
+			return "/velocity/template/javacode/controller.tpl";
 		}
 
 		@Override
@@ -113,10 +114,10 @@ public class ConfigBuilder {
 
 	};
 	
-	public final static Config CRON = new Config(){
+	public final static Type CRON = new Type(){
 		@Override
 		public String tpl() {
-			return "/velocity/template/code/cron.tpl";
+			return "/velocity/template/javacode/cron.tpl";
 		}
 
 		@Override
@@ -129,8 +130,16 @@ public class ConfigBuilder {
 			return "Cron";
 		}
 
-		
 	};
+
+	public final static Type[] types = new Type[]{
+		MODEL,DAO,DAO_IMPL,SERVICE,SERVICE_IMPL,CONTROLLER,CRON
+	};
+	
+	@Override
+	public Type[] types() {
+		return types;
+	}
 	
 
 }

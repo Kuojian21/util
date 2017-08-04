@@ -1,6 +1,6 @@
 package com.tools.code.config;
 
-public interface Config {
+public interface Type {
 	String tpl();
 	String pkg();
 	String suffix();
