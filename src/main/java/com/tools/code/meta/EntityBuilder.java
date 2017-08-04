@@ -1,4 +1,4 @@
-package com.tools.code;
+package com.tools.code.meta;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.alibaba.fastjson.JSON;
-import com.tools.code.meta.Entity;
-import com.tools.code.meta.Property;
 
 public class EntityBuilder {
 
