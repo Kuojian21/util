@@ -191,7 +191,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }
@@ -213,7 +213,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }
@@ -235,7 +235,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }
@@ -256,7 +256,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }
@@ -279,7 +279,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }
@@ -298,7 +298,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }
@@ -316,7 +316,7 @@ public class GenerateCode {
             fw.flush();
             fw.close();
         } catch (Exception ex) {
-            LogConstant.runLog.error("", ex);
+//            LogConstant.runLog.error("", ex);
         }
         System.out.println("生成：" + outPath);
     }

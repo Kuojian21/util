@@ -7,14 +7,42 @@ public class XmlGroup  implements Group{
 			return "/velocity/template/xml/mybatis.tpl";
 		}
 
-		@Override
 		public String pkg() {
 			return "cron";
 		}
 
-		@Override
 		public String suffix() {
 			return "Cron";
 		}
+
+		@Override
+		public String path(String base) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String name() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String ext() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	};
+
+	@Override
+	public Type[] types() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String path() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

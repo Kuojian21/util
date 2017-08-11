@@ -19,35 +19,48 @@
 	</properties>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<!-- 测试 -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<!-- 简单日志门面，不是具体的日志解决方案，它只服务于各种各样的日志系统。 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.2</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<!-- 日志：log4j -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+		<!-- json -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.20</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<!-- 提供用于集合，缓存，支持原语，并发性，常见注解，字符串处理，I/O和验证的实用方法 -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>20.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
+		<!-- sftp -->
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>0.1.53</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 		<dependency>
@@ -112,19 +125,19 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16 -->
 		<!-- 加密 -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk16</artifactId>
-			<version>${bcprov-jdk16.version}</version>
+			<version>1.46</version>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
+
+
+
 		<!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+		<!-- zookeeper -->
 		<dependency>
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
@@ -144,48 +157,60 @@
 			<artifactId>javase</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
-<dependency>
-    <groupId>com.thoughtworks.xstream</groupId>
-    <artifactId>xstream</artifactId>
-    <version>1.4.10</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
-<dependency>
-    <groupId>dom4j</groupId>
-    <artifactId>dom4j</artifactId>
-    <version>1.6.1</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-core</artifactId>
-    <version>4.3.10.RELEASE</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-context</artifactId>
-    <version>4.3.10.RELEASE</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-beans</artifactId>
-    <version>4.3.10.RELEASE</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-core -->
-<!-- activemq -->
-<dependency>
-    <groupId>org.apache.activemq</groupId>
-    <artifactId>activemq-core</artifactId>
-    <version>5.7.0</version>
-</dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
-        </dependency>
+		<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+		<!-- xml -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.10</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+		<!-- xml -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.3.10.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.3.10.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>4.3.10.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-core -->
+		<!-- activemq -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<version>5.7.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->
+		<!-- velocity -->
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
+		<!-- snakeyaml -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>1.18</version>
+		</dependency>
 
 	</dependencies>
 

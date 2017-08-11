@@ -7,14 +7,30 @@ public class JspGroup  implements Group{
 			return "/velocity/template/jsp/add.tpl";
 		}
 
-		@Override
 		public String pkg() {
 			return "cron";
 		}
 
-		@Override
 		public String suffix() {
 			return "Cron";
+		}
+
+		@Override
+		public String path(String base) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String name() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String ext() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	};
@@ -24,14 +40,30 @@ public class JspGroup  implements Group{
 			return "/velocity/template/jsp/list.tpl";
 		}
 
-		@Override
 		public String pkg() {
 			return "cron";
 		}
 
-		@Override
 		public String suffix() {
 			return "Cron";
+		}
+
+		@Override
+		public String path(String base) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String name() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String ext() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	};
@@ -41,14 +73,30 @@ public class JspGroup  implements Group{
 			return "/velocity/template/jsp/edit.tpl";
 		}
 
-		@Override
 		public String pkg() {
 			return "cron";
 		}
 
-		@Override
 		public String suffix() {
 			return "Cron";
+		}
+
+		@Override
+		public String path(String base) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String name() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String ext() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	};
@@ -59,15 +107,43 @@ public class JspGroup  implements Group{
 			return "/velocity/template/jsp/view.tpl";
 		}
 
-		@Override
 		public String pkg() {
 			return "cron";
 		}
 
-		@Override
 		public String suffix() {
 			return "Cron";
 		}
 
+		@Override
+		public String path(String base) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String name() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String ext() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	};
+
+	@Override
+	public Type[] types() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String path() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
