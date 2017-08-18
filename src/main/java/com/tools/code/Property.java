@@ -1,19 +1,19 @@
 package com.tools.code;
 
 public class Property {
-	/**  */
+	/** 属性名称 */
 	private String name;
-	/**  */
+	/** 属性类型 */
 	private String type;
-	/**  */
+	/** mybatis中javaType */
 	private String mtype;
-	/**  */
+	/** 列名称 */
 	private String cname;
-	/**  */
+	/** 主键*/
+	private boolean ckey;
+	/** 列类型 */
 	private String ctype;
-	/**  */
-	private String ckey;
-	/**  */
+	/** 列注释 */
 	private String ccomment;
 	public String getName() {
 		return name;
@@ -39,10 +39,10 @@ public class Property {
 	public void setCtype(String ctype) {
 		this.ctype = ctype;
 	}
-	public String getCkey() {
+	public boolean getCkey() {
 		return ckey;
 	}
-	public void setCkey(String ckey) {
+	public void setCkey(boolean ckey) {
 		this.ckey = ckey;
 	}
 	public String getCcomment() {

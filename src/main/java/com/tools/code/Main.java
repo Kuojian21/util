@@ -12,7 +12,7 @@ import org.apache.velocity.runtime.RuntimeInstance;
 import com.tools.io.FileTool;
 import com.tools.io.StreamTool;
 
-public class AutoGenerate {
+public class Main {
 	private static final RuntimeInstance RUNTIME_INSTANCE = new RuntimeInstance();
 	private static final String UTF_8 = "UTF-8";
 	static {
@@ -24,7 +24,7 @@ public class AutoGenerate {
 		RUNTIME_INSTANCE.init(properties);
 	}
 
-	private AutoGenerate() {
+	private Main() {
 
 	}
 

@@ -5,29 +5,42 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.alibaba.fastjson.JSON;
+import com.tools.database.JdbcTool;
 
 public class ModelFactory {
 
-	public static Model mysql(Connection connection, String table) {
-		Statement stmt = null;
+	public static Model mModel(Connection conn, String table) {
 		Model model = new Model();
+		Statement stmt = null;
+		ResultSet rs = null;
 		try {
 			model.setTable(table);
-			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("show full columns from " + table);
-			while(rs.next()){
-				Property property = new Property();
-				property.setCname(rs.getString("Field"));
-				property.setCtype(rs.getString("Type"));
-				property.setCkey(rs.getString("Key"));
-				property.setCcomment(rs.getString("Comment"));
-				model.addProperties(property);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("show full columns from " + table);
+			while (rs.next()) {
+				Property p = new Property();
+				String cname = rs.getString("Field");
+				p.setCname(cname);
+				p.setName(Util.c2pName(cname));
+				String ctype = rs.getString("Type");
+				p.setCtype(ctype);
+				p.setType(Util.c2pType(ctype));
+				p.setMtype(Util.c2mType(ctype));
+				if ("PRI".equals(rs.getString("Key"))) {
+					p.setCkey(true);
+				} else {
+					p.setCkey(false);
+				}
+				p.setCcomment(rs.getString("Comment"));
+				model.addProperties(p);
 			}
 			return model;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			JdbcTool.close(rs);
+			JdbcTool.close(stmt);
+		}
 		return model;
 	}
 
