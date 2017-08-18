@@ -9,7 +9,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPSClient;
 
 import com.google.common.base.Strings;
-import com.tools.io.IOTool;
+import com.tools.io.StreamTool;
 import com.tools.logger.LogConstant;
 
 public class FtpsUtil {
@@ -41,7 +41,7 @@ public class FtpsUtil {
 			String root = ftpClient.printWorkingDirectory();
 			FtpsUtil.changeDir(ftpClient, directory);
 			String filename = new String(file.getBytes("UTF-8"), "ISO-8859-1");
-			if (ftpClient.storeFile(filename, IOTool.buffer(is))) {
+			if (ftpClient.storeFile(filename, StreamTool.buffer(is))) {
 				LogConstant.runLog.info(module, "成功");
 			} else {
 				LogConstant.runLog.error(module, "失败");
@@ -54,7 +54,7 @@ public class FtpsUtil {
 				FtpsUtil.close(ftpClient);
 			}
 			if (isclose) {
-				IOTool.close(is);
+				StreamTool.close(is);
 			}
 
 		}
@@ -66,7 +66,7 @@ public class FtpsUtil {
 		try {
 			String root = ftpClient.printWorkingDirectory();
 			FtpsUtil.changeDir(ftpClient, directory);
-			BufferedOutputStream bos = IOTool.buffer(os);
+			BufferedOutputStream bos = StreamTool.buffer(os);
 			if (ftpClient.retrieveFile(file, bos)) {
 				LogConstant.runLog.info(module, "成功");
 			} else {
@@ -81,7 +81,7 @@ public class FtpsUtil {
 				FtpsUtil.close(ftpClient);
 			}
 			if (osclose) {
-				IOTool.close(os);
+				StreamTool.close(os);
 			}
 
 		}

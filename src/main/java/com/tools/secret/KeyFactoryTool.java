@@ -14,7 +14,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 
 import com.itextpdf.text.pdf.codec.Base64;
-import com.tools.io.IOTool;
+import com.tools.io.StreamTool;
 
 public class KeyFactoryTool {
 	public enum ALGORITHM {
@@ -53,7 +53,7 @@ public class KeyFactoryTool {
 	
 	public byte[] loadKey(Reader reader) {
 		try {
-			BufferedReader br = IOTool.buffer(reader);
+			BufferedReader br = StreamTool.buffer(reader);
 			StringBuilder sb = new StringBuilder();
 			String readLine = null;
 			while ((readLine = br.readLine()) != null) {
@@ -69,7 +69,7 @@ public class KeyFactoryTool {
 			e.printStackTrace();
 			return null;
 		} finally {
-			IOTool.close(reader);
+			StreamTool.close(reader);
 		}
 	}
 	

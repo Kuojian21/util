@@ -19,7 +19,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import com.google.common.base.Charsets;
-import com.tools.io.IOTool;
+import com.tools.io.StreamTool;
 
 public class CloseableHttpClientTool {
 
@@ -187,7 +187,7 @@ public class CloseableHttpClientTool {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			IOTool.close(out);
+			StreamTool.close(out);
 		}
 	}
 

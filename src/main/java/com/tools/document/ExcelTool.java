@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.tools.io.IOTool;
+import com.tools.io.StreamTool;
 import com.tools.logger.LogConstant;
 
 public class ExcelTool {
@@ -52,7 +52,7 @@ public class ExcelTool {
 			LogConstant.runLog.error(module, "异常", e);
 		} finally {
 			close(workbook);
-			IOTool.close(os);
+			StreamTool.close(os);
 		}
 
 	}

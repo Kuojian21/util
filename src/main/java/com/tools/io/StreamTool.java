@@ -7,6 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,7 +19,7 @@ import java.io.Writer;
 
 import com.tools.logger.LogConstant;
 
-public class IOTool {
+public class StreamTool {
 	public static void close(InputStream in) {
 		String module = "关闭输入流";
 		if (in != null) {
@@ -30,29 +32,6 @@ public class IOTool {
 	}
 	
 	public static void close(OutputStream out) {
-		String module = "关闭输出流";
-		if (out != null) {
-			try {
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				LogConstant.runLog.error(module, "异常", e);
-			}
-		}
-	}
-	
-	public static void close(Reader in) {
-		String module = "关闭输入流";
-		if (in != null) {
-			try {
-				in.close();
-			} catch (IOException e) {
-				LogConstant.runLog.error(module, "异常", e);
-			}
-		}
-	}
-	
-	public static void close(Writer out) {
 		String module = "关闭输出流";
 		if (out != null) {
 			try {
@@ -108,7 +87,46 @@ public class IOTool {
 		}
 	}
 	
+	public static void close(Reader in) {
+		String module = "关闭输入流";
+		if (in != null) {
+			try {
+				in.close();
+			} catch (IOException e) {
+				LogConstant.runLog.error(module, "异常", e);
+			}
+		}
+	}
 	
+	public static void close(Writer out) {
+		String module = "关闭输出流";
+		if (out != null) {
+			try {
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				LogConstant.runLog.error(module, "异常", e);
+			}
+		}
+	}
+	
+	public static Reader toReader(File file){
+		try {
+			return new FileReader(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Writer toWriter(File file){
+		try {
+			return new FileWriter(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 
 }

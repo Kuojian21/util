@@ -9,7 +9,7 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.tools.io.IOTool;
+import com.tools.io.StreamTool;
 import com.tools.tree.EmptyNode;
 import com.tools.tree.Node;
 
@@ -76,7 +76,7 @@ public abstract class FileNode implements Node, Cloneable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				IOTool.close(zis);
+				StreamTool.close(zis);
 			}
 		}
 	}
@@ -112,14 +112,14 @@ public abstract class FileNode implements Node, Cloneable {
 			}
 			InputStream in = null;
 			try {
-				in = IOTool.toInputStream(file);
+				in = StreamTool.toInputStream(file);
 				if(this.handle(in)){
 					this.printAbsolutePath(file.getAbsolutePath());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				IOTool.close(in);
+				StreamTool.close(in);
 			}
 			break;
 		}
@@ -128,7 +128,7 @@ public abstract class FileNode implements Node, Cloneable {
 				if (file.isDirectory()) {
 					break;
 				}
-				BufferedReader br = IOTool.buffer(IOTool.toReader(IOTool.toInputStream(file),
+				BufferedReader br = StreamTool.buffer(StreamTool.toReader(StreamTool.toInputStream(file),
 						"UTF-8"));
 				String line = null;
 				boolean print = false;
@@ -175,7 +175,7 @@ public abstract class FileNode implements Node, Cloneable {
 					if (entry.isDirectory()) {
 						break;
 					}
-					BufferedReader br = IOTool.buffer(IOTool.toReader(zis, "UTF-8"));
+					BufferedReader br = StreamTool.buffer(StreamTool.toReader(zis, "UTF-8"));
 					String line = null;
 					boolean print = false;
 					while ((line = br.readLine()) != null) {

@@ -16,7 +16,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
 import com.jcraft.jsch.SftpException;
-import com.tools.io.IOTool;
+import com.tools.io.StreamTool;
 import com.tools.logger.LogConstant;
 
 public class JschUtil {
@@ -28,7 +28,7 @@ public class JschUtil {
 		try {
 			String root = sftp.pwd();
 			JschUtil.changeDir(sftp, directory);
-			sftp.put(IOTool.buffer(is), file);
+			sftp.put(StreamTool.buffer(is), file);
 			sftp.cd(root);
 			LogConstant.runLog.info(module, "结束", "file:" + file);
 		} catch (Exception e) {
@@ -38,7 +38,7 @@ public class JschUtil {
 				JschUtil.close(sftp);
 			}
 			if(isclose){
-				IOTool.close(is);
+				StreamTool.close(is);
 			}
 		}
 	}
@@ -48,7 +48,7 @@ public class JschUtil {
 		try {
 			String root = sftp.pwd();
 			JschUtil.changeDir(sftp, directory);
-			BufferedOutputStream bos = IOTool.buffer(os);
+			BufferedOutputStream bos = StreamTool.buffer(os);
 			sftp.get(file, bos);
 			bos.flush();
 			sftp.cd(root);
@@ -60,7 +60,7 @@ public class JschUtil {
 				JschUtil.close(sftp);
 			}
 			if(osclose){
-				IOTool.close(os);
+				StreamTool.close(os);
 			}
 		}
 	}
