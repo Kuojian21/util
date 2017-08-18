@@ -17,9 +17,13 @@ public class ModelFactory {
 			stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("show full columns from " + table);
 			while(rs.next()){
-				
+				Property property = new Property();
+				property.setCname(rs.getString("Field"));
+				property.setCtype(rs.getString("Type"));
+				property.setCkey(rs.getString("Key"));
+				property.setCcomment(rs.getString("Comment"));
+				model.addProperties(property);
 			}
-			System.out.println(JSON.toJSONString(model));
 			return model;
 		} catch (SQLException e) {
 			e.printStackTrace();

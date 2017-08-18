@@ -1,12 +1,20 @@
 package com.tools.code;
 
 public class Property {
+	/**  */
 	private String name;
+	/**  */
 	private String type;
+	/**  */
+	private String mtype;
+	/**  */
 	private String cname;
+	/**  */
 	private String ctype;
-	private boolean primary;
-	private String comment;
+	/**  */
+	private String ckey;
+	/**  */
+	private String ccomment;
 	public String getName() {
 		return name;
 	}
@@ -31,17 +39,22 @@ public class Property {
 	public void setCtype(String ctype) {
 		this.ctype = ctype;
 	}
-	public boolean isPrimary() {
-		return primary;
+	public String getCkey() {
+		return ckey;
 	}
-	public void setPrimary(boolean primary) {
-		this.primary = primary;
+	public void setCkey(String ckey) {
+		this.ckey = ckey;
 	}
-	public String getComment() {
-		return comment;
+	public String getCcomment() {
+		return ccomment;
 	}
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setCcomment(String ccomment) {
+		this.ccomment = ccomment;
 	}
-	
+	public String getMtype() {
+		return mtype;
+	}
+	public void setMtype(String mtype) {
+		this.mtype = mtype;
+	}
 }
