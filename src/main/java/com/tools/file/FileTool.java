@@ -1,12 +1,16 @@
-package com.tools.io;
+package com.tools.file;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.google.common.base.Strings;
 
-public class FileTool {
+/**
+ * http://docs.oracle.com/javase/tutorial/essential/io/notification.html
+ */
 
+public class FileTool {
+	
 	public static boolean mkdir(String dir) {
 		if (Strings.isNullOrEmpty(dir)) {
 			return false;

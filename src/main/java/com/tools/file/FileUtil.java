@@ -1,4 +1,4 @@
-package com.tools.io;
+package com.tools.file;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

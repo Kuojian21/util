@@ -9,7 +9,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeInstance;
 
-import com.tools.io.FileTool;
+import com.tools.file.FileTool;
 import com.tools.io.StreamTool;
 
 public class Main {
