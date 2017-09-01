@@ -23,11 +23,11 @@ public class QuartzTool {
 	}
 	
 	public static void addJob(){
-		
+//		scheduler().scheduleJob(jobDetail, trigger);
 	}
 	
 	public static void deleteJob(){
-		
+//		scheduler().deleteJob(jobKey);
 	}
 
 }
