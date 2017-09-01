@@ -1,9 +1,17 @@
 package com.tools.quartz;
 
+import org.quartz.CronScheduleBuilder;
+import org.quartz.Job;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
+import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.spi.MutableTrigger;
 
 public class QuartzTool {
 
@@ -30,4 +38,14 @@ public class QuartzTool {
 //		scheduler().deleteJob(jobKey);
 	}
 
+	public static void main(String[] args) throws SchedulerException{
+		Scheduler scheduler = factory.getScheduler();
+		scheduler.start();
+		JobDetail job = JobBuilder.newJob(MyJob.class).build();
+		MutableTrigger trigger = CronScheduleBuilder.cronSchedule("0 34 * * * ?").build();
+		trigger.setKey(new TriggerKey("default"));
+		scheduler.scheduleJob(job, trigger);
+	}
 }
+
+
