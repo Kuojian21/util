@@ -38,13 +38,16 @@ public class QuartzTool {
 //		scheduler().deleteJob(jobKey);
 	}
 
-	public static void main(String[] args) throws SchedulerException{
+	public static void main(String[] args) throws SchedulerException, InterruptedException{
 		Scheduler scheduler = factory.getScheduler();
 		scheduler.start();
 		JobDetail job = JobBuilder.newJob(MyJob.class).build();
-		MutableTrigger trigger = CronScheduleBuilder.cronSchedule("0 34 * * * ?").build();
+		MutableTrigger trigger = CronScheduleBuilder.cronSchedule("45 46 * * * ?").build();
 		trigger.setKey(new TriggerKey("default"));
 		scheduler.scheduleJob(job, trigger);
+		Thread.sleep(120000);
+		scheduler.shutdown();
+		System.out.println("@@@@@@@@@shutdown");
 	}
 }
 
