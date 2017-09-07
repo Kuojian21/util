@@ -25,8 +25,8 @@ public class HttpClientBuilder {
 	private static interface ResponseHandle<T> {
 		T handle(CloseableHttpResponse response);
 	}
-	
-	private static final ResponseHandle<String> STRING = new ResponseHandle<String>(){
+
+	private static final ResponseHandle<String> STRING = new ResponseHandle<String>() {
 		@Override
 		public String handle(CloseableHttpResponse response) {
 			try {
@@ -41,7 +41,6 @@ public class HttpClientBuilder {
 	static {
 		manager = HttpClientManager.vManager();
 	}
-
 
 	public static <T> T post(String url, RequestConfig requestConfig, Header[] headers, HttpEntity requestEntity,
 			ResponseHandle<T> handle) {
@@ -76,22 +75,19 @@ public class HttpClientBuilder {
 		HttpEntity requestEntity = EntityBuilder.create()
 				.setContentType(ContentType.create("application/x-www-form-urlencoded", Charsets.UTF_8))
 				.setParameters(pairs).build();
-		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity,
-				STRING);
+		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
 	}
 
 	public static String post(String url, Header[] headers, String content) {
 		HttpEntity requestEntity = EntityBuilder.create()
 				.setContentType(ContentType.parse("text/plain; charset=UTF-8")).setText(content).build();
-		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity,
-				STRING);
+		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
 	}
 
 	public static String post(String url, Header[] headers, File file) {
 		HttpEntity requestEntity = EntityBuilder.create().setContentType(ContentType.MULTIPART_FORM_DATA).setFile(file)
 				.build();
-		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity,
-				STRING);
+		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
 	}
 
 	public static <T> T get(String url, RequestConfig requestConfig, Header[] headers, ResponseHandle<T> handle) {
@@ -130,6 +126,10 @@ public class HttpClientBuilder {
 
 	public void demo(RequestConfig requestConfig) {
 		RequestConfig.custom().setSocketTimeout(200).setConnectionRequestTimeout(200).setConnectTimeout(200).build();
+	}
+	
+	public static void main(String[] args){
+		System.out.println(get("https://www.lmlc.com/m/base_info"));
 	}
 
 }
