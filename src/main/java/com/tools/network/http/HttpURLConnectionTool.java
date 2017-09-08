@@ -10,7 +10,7 @@ import java.util.List;
 
 public class HttpURLConnectionTool {
 	public static void main(String args[]) throws Exception {
-		String urlString = "https://www.lmlc.com";
+		String urlString = "https://www.baidu.com/";
 		CookieManager manager = new CookieManager();
 		CookieHandler.setDefault(manager);
 		URL url = new URL(urlString);
