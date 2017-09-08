@@ -20,9 +20,9 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.common.base.Charsets;
 
-public class HttpClientBuilder {
+public class HttpClientTool {
 
-	private static interface ResponseHandle<T> {
+	public static interface ResponseHandle<T> {
 		T handle(CloseableHttpResponse response);
 	}
 
@@ -75,19 +75,19 @@ public class HttpClientBuilder {
 		HttpEntity requestEntity = EntityBuilder.create()
 				.setContentType(ContentType.create("application/x-www-form-urlencoded", Charsets.UTF_8))
 				.setParameters(pairs).build();
-		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
+		return HttpClientTool.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
 	}
 
 	public static String post(String url, Header[] headers, String content) {
 		HttpEntity requestEntity = EntityBuilder.create()
 				.setContentType(ContentType.parse("text/plain; charset=UTF-8")).setText(content).build();
-		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
+		return HttpClientTool.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
 	}
 
 	public static String post(String url, Header[] headers, File file) {
 		HttpEntity requestEntity = EntityBuilder.create().setContentType(ContentType.MULTIPART_FORM_DATA).setFile(file)
 				.build();
-		return HttpClientBuilder.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
+		return HttpClientTool.post(url, RequestConfig.custom().build(), headers, requestEntity, STRING);
 	}
 
 	public static <T> T get(String url, RequestConfig requestConfig, Header[] headers, ResponseHandle<T> handle) {
@@ -118,7 +118,7 @@ public class HttpClientBuilder {
 	}
 
 	public static String get(String url) {
-		return HttpClientBuilder.get(url, RequestConfig.custom().build(), new Header[] {
+		return HttpClientTool.get(url, RequestConfig.custom().build(), new Header[] {
 			new BasicHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8")
 		}, STRING);
 
