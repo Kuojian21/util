@@ -6,7 +6,7 @@ package com.algorithm.sort;
  * @author bjzhangkuojian
  *
  */
-public class Radix extends SortBase {
+public class Radix extends Sort {
 
 	@Override
 	public void sort(int[] a) {

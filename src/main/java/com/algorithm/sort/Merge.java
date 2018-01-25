@@ -1,6 +1,11 @@
 package com.algorithm.sort;
 
-public class Merge extends SortBase {
+/**
+ * 合并排序
+ * @author bjzhangkuojian
+ *
+ */
+public class Merge extends Sort {
 
 	@Override
 	public void sort(int[] a) {

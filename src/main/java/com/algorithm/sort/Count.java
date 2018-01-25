@@ -1,6 +1,11 @@
 package com.algorithm.sort;
 
-public class Count extends SortBase {
+/**
+ * 基数排序
+ * @author bjzhangkuojian
+ *
+ */
+public class Count extends Sort {
 
 	@Override
 	public void sort(int[] a) {

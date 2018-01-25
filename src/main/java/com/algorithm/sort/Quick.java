@@ -1,6 +1,11 @@
 package com.algorithm.sort;
 
-public class Quick extends SortBase {
+/**
+ * 快速排序
+ * @author bjzhangkuojian
+ *
+ */
+public class Quick extends Sort {
 	
 	@Override
 	public void sort(int[] a) {
