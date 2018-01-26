@@ -3,7 +3,9 @@
 log
 log/*
 target
-target/
+target/*
+bin
+bin/*
 .classpath
 .project
 
