@@ -8,7 +8,7 @@ package com.algorithm.tree.binary;
 public class Transfer {
 
 
-	public void transfer(Node node) {
+	public void transfer(AvlNode node) {
 		if (node.left != null) {
 			transfer(node.left);
 			setLeft(node, node.left);
@@ -19,7 +19,7 @@ public class Transfer {
 		}
 	}
 
-	public void setLeft(Node node, Node left) {
+	public void setLeft(AvlNode node, AvlNode left) {
 		if (left.right != null) {
 			setLeft(node, left.right);
 		} else {
@@ -28,7 +28,7 @@ public class Transfer {
 		}
 	}
 
-	public void setRight(Node node, Node right) {
+	public void setRight(AvlNode node, AvlNode right) {
 		if (right.left != null) {
 			setRight(node, right.left);
 		} else {
