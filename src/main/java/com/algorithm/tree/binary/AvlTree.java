@@ -7,24 +7,26 @@ public class AvlTree<T> {
 			node = new AvlNode<T>(data);
 		} else if (this.compareTo(node.data, data) < 0) {
 			node.left = this.insert(node.left, data);
-			if (Math.abs(node.left.height - node.right.height) >= 2) {
-				if (node.left.height > node.right.height) {
+			if (this.height(node.left) - this.height(node.right) >= 2) {
+				if (this.height(node.left.left) > this.height(node.left.right)) {
 					node = ll(node);
 				} else {
 					node = lr(node);
 				}
+			} else {
+				node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
 			}
-			node.height = Math.max(node.left.height, node.right.height) + 1;
 		} else if (this.compareTo(node.data, data) > 0) {
-			node.left = this.insert(node.right, data);
-			if (Math.abs(node.left.height - node.right.height) >= 2) {
-				if (node.left.height > node.right.height) {
-					node = rl(node);
-				} else {
+			node.right = this.insert(node.right, data);
+			if (this.height(node.right) - this.height(node.left) >= 2) {
+				if (this.height(node.right.right) > this.height(node.right.left)) {
 					node = rr(node);
+				} else {
+					node = rl(node);
 				}
+			} else {
+				node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
 			}
-			node.height = Math.max(node.left.height, node.right.height) + 1;
 		}
 		return node;
 	}
@@ -40,24 +42,82 @@ public class AvlTree<T> {
 		return -1;
 	}
 
+	private int height(AvlNode<T> node) {
+		if (node == null) {
+			return -1;
+		}
+		return node.height;
+	}
+
 	private AvlNode<T> ll(AvlNode<T> node) {
+		AvlNode<T> t = node;
+		node = node.left;
+		t.right = node.right;
+		node.right = t;
+		t.height -= 1;
 		return node;
 
 	}
 
 	private AvlNode<T> rr(AvlNode<T> node) {
+		AvlNode<T> t = node;
+		node = node.right;
+		t.right = node.left;
+		node.left = t;
+		t.height -= 1;
 		return node;
 
 	}
 
 	private AvlNode<T> lr(AvlNode<T> node) {
-		return node;
+		node.left = rr(node.left);
+		node.left.height += 1;
+		return ll(node);
 
 	}
 
 	private AvlNode<T> rl(AvlNode<T> node) {
-		return node;
+		node.right = ll(node.right);
+		node.right.height += 1;
+		return rr(node);
 
 	}
-
+	
+	
+	public void traverse(AvlNode<T> node) {
+		System.out.println(node.data);
+		if(node.left != null) {
+			this.traverse(node.left);
+		}
+		
+		if(node.right != null) {
+			this.traverse(node.right);
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) {
+		AvlTree<Integer> tree = new AvlTree<Integer>();
+		AvlNode<Integer> root = null;
+		for(int i = 0; i< 100;i++) {
+			root = tree.insert(root, i);
+		}
+		System.out.println(root);
+		
+		tree.traverse(root);
+//		new Transfer<Integer>().transfer(root);
+		
+		AvlNode<Integer> node = root;
+		while(node.left!=null) {
+			node = node.left;
+		};
+		
+		do {
+			System.out.println(node.data);
+			node = node.right;
+		}while(node.right!=null);
+		
+		
+	}
 }

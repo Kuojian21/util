@@ -5,10 +5,10 @@ package com.algorithm.tree.binary;
  * @author ThinkPad
  *
  */
-public class Transfer {
+public class Transfer<T> {
 
 
-	public void transfer(AvlNode node) {
+	public void transfer(AvlNode<T> node) {
 		if (node.left != null) {
 			transfer(node.left);
 			setLeft(node, node.left);
@@ -19,7 +19,7 @@ public class Transfer {
 		}
 	}
 
-	public void setLeft(AvlNode node, AvlNode left) {
+	public void setLeft(AvlNode<T> node, AvlNode<T> left) {
 		if (left.right != null) {
 			setLeft(node, left.right);
 		} else {
@@ -28,7 +28,7 @@ public class Transfer {
 		}
 	}
 
-	public void setRight(AvlNode node, AvlNode right) {
+	public void setRight(AvlNode<T> node, AvlNode<T> right) {
 		if (right.left != null) {
 			setRight(node, right.left);
 		} else {
