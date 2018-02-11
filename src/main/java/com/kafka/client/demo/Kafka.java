@@ -1,4 +1,4 @@
-package com.kafka.client;
+package com.kafka.client.demo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
