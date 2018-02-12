@@ -5,7 +5,7 @@ import java.util.Random;
 
 /**
  * from https://github.com/twitter/snowflake/blob/master/src/main/scala/com/twitter/service/snowflake/IdWorker.scala
- *
+ * 42位时间戳+5位workId+5位datacenterid+12位自增序列
  * @author adyliu (imxylz@gmail.com)
  * @since 1.0
  */
