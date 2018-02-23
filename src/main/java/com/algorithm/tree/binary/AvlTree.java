@@ -74,7 +74,7 @@ public class AvlTree<T> {
 	}
 
 	private AvlNode<T> lr(AvlNode<T> node) {
-		System.out.println("lr");
+//		System.out.println("lr");
 		node.left = rr(node.left);
 		node.left.height += 1;
 		return ll(node);
@@ -82,7 +82,7 @@ public class AvlTree<T> {
 	}
 
 	private AvlNode<T> rl(AvlNode<T> node) {
-		System.out.println("rl");
+//		System.out.println("rl");
 		node.right = ll(node.right);
 		node.right.height += 1;
 		return rr(node);
