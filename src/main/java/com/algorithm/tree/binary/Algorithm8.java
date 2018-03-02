@@ -57,5 +57,37 @@ public class Algorithm8 {
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * 颠倒一个字符串。优化速度。优化空间。
+	 * @param str
+	 */
+	public void reverse(char[] str,int s,int e) {
+		while(s < e) {
+			char c = str[s];
+			str[s] = str[e];
+			str[e] = c;
+		}
+	}
+	
+	/**
+	 * 颠倒一个句子中的词的顺序，比如将“我叫克丽丝”转换为“克丽丝叫我”，
+实现速度最快，移动最少。
+	 * @param str
+	 */
+	public void reverseWord(char[] str) {
+		reverse(str,0,str.length - 1);
+		int s = 0;
+		for(int i = 0; i < str.length;i++) {
+			if(str[i] == ' ') {
+				if(s < i - 1) {
+					reverse(str,s,i-1);
+				}
+				s = i + 1;
+			}
+		}
+	}
+	
 
 }
