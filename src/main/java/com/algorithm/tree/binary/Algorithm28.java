@@ -7,7 +7,7 @@ package com.algorithm.tree.binary;
  * @author ThinkPad
  *
  */
-public class Algorithm27 {
+public class Algorithm28 {
 
 	public int count(int n) {
 		int c = 0;
@@ -20,7 +20,7 @@ public class Algorithm27 {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(new Algorithm27().count(10));
+		System.out.println(new Algorithm28().count(10));
 	}
 	
 }
