@@ -69,6 +69,8 @@ public class Algorithm8 {
 			char c = str[s];
 			str[s] = str[e];
 			str[e] = c;
+			s++;
+			e--;
 		}
 	}
 

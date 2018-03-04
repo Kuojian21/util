@@ -12,4 +12,37 @@ package com.algorithm.tree.binary;
  */
 public class Algorithm18 {
 
+	/**
+	 * y	x
+	 * m	0
+	 * ..	..
+	 * n-1	n-1-m
+	 * 0	n-m
+	 * ..	..
+	 * m-2	n-2
+	 * 
+	 * y = (x + m)/n;
+	 * @param n
+	 * @param m
+	 * @return
+	 */
+	public int func(int n,int m) {
+		if(n == 1) {
+			return 0;
+		}
+		return (func(n - 1,m) + m) %n;
+	}
+	
+	public int func2(int n, int m) {
+		int y = 0;
+		for(int i = 2;i <=n;i++) {
+			y = (y + m)%i;
+		}
+		return y;
+	}
+	
+	
+	public static void main(String[] args) {
+		System.out.println(new Algorithm18().func2(3,2));
+	}
 }
