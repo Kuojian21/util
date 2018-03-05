@@ -18,7 +18,7 @@ outputstr 所指的值为123456789
 public class Algorithm25 {
 	
 	public List<String> continumax(char[] str) {
-		int s = 0,e = 0,len = 0;
+		int s = 0,len = 0;
 		int mlen = 0;
 		List<String> r = Lists.newArrayList();
 		
@@ -28,7 +28,6 @@ public class Algorithm25 {
 					s = i;
 				}
 				len++;
-				e = i;
 			}
 			
 			if(len > 0 && (!(str[i] >= '0' && str[i] <= '9') || i == l - 1)){
@@ -41,7 +40,6 @@ public class Algorithm25 {
 				}
 				len = 0;
 				s = 0;
-				e = 0;
 			}
 		}
 		return r;
