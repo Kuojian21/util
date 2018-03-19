@@ -1,8 +1,9 @@
+package com.lambda;
 import java.util.function.Supplier;
 
 import org.springframework.util.ReflectionUtils;
 
-public class CouponConfig {
+public class Property {
     /**
      * 发放张数
      */
@@ -65,7 +66,7 @@ public class CouponConfig {
     }
     
     public static void main(String[] args) {
-    	CouponConfig config = new CouponConfig();
+    	Property config = new Property();
     	config.setCount(2);
     	config.setDays("1,2");
     	config.setPrice("3,4");
