@@ -236,12 +236,7 @@
 			<artifactId>kafka-clients</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.12</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+
 <!-- https://mvnrepository.com/artifact/com.github.xuwei-k/html2image -->
 <dependency>
     <groupId>com.github.xuwei-k</groupId>

@@ -3,6 +3,7 @@ package com.kafka.client.demo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.Random;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,7 +18,7 @@ public class Kafka {
 
 	public static void demoProduce() {
 		Properties props = new Properties();
-		props.put("bootstrap.servers", "10.200.142.37:9097,10.200.142.38:9097,10.200.142.39:9097");
+		props.put("bootstrap.servers", "10.200.142.35:9090,10.200.142.36:9090,10.200.142.37:9090");
 		props.put("acks", "0");
 		props.put("retries", 0);
 		props.put("batch.size", 16384);
@@ -26,7 +27,7 @@ public class Kafka {
 
 		Producer<String, String> producer = new KafkaProducer<String, String>(props);
 		producer.send(
-				new ProducerRecord<String, String>("chargeReturnTopic_test20180209", "LM420A1CDA949D56D000", "2"));
+				new ProducerRecord<String, String>("lmlc_PAY_SUCCESS_ORDER_dev20180412", "201803292024CORDER49316246" + (new Random().nextInt(2) == 0 ? "":"1"), "1"));
 		producer.close();
 		
 	}
@@ -51,6 +52,7 @@ public class Kafka {
                 System.out.println("fetched from partition " + record.partition() + ", offset: " + record.offset() + ", message: " + record.value());    
             } 
 		}
+		consumer.commitSync();
 		consumer.close();
 	}
 
