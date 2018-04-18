@@ -19,7 +19,6 @@ public class LockTest {
 			}
 		}).start();
 		new Thread(new Runnable() {
-
 			@Override
 			public void run() {
 				r.lock();
