@@ -237,27 +237,31 @@
 			<version>1.0.0</version>
 		</dependency>
 
-<!-- https://mvnrepository.com/artifact/com.github.xuwei-k/html2image -->
-<dependency>
-    <groupId>com.github.xuwei-k</groupId>
-    <artifactId>html2image</artifactId>
-    <version>0.1.0</version>
-</dependency>
-<dependency>
-    <groupId>org.lobobrowser</groupId>
-    <artifactId>cobra</artifactId>
-    <version>0.98.4</version>
-    <scope>system</scope>
-    <systemPath>D:/soft/Java/lib/lobo-distro-0.98.4/lobo.jar</systemPath>
-</dependency>
-<!-- https://mvnrepository.com/artifact/net.sf.cssbox/cssbox -->
-<dependency>
-    <groupId>net.sf.cssbox</groupId>
-    <artifactId>cssbox</artifactId>
-    <version>4.4</version>
-</dependency>
-
-
+		<!-- https://mvnrepository.com/artifact/com.github.xuwei-k/html2image -->
+		<dependency>
+			<groupId>com.github.xuwei-k</groupId>
+			<artifactId>html2image</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.lobobrowser</groupId>
+			<artifactId>cobra</artifactId>
+			<version>0.98.4</version>
+			<scope>system</scope>
+			<systemPath>D:/soft/Java/lib/lobo-distro-0.98.4/lobo.jar</systemPath>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.cssbox/cssbox -->
+		<dependency>
+			<groupId>net.sf.cssbox</groupId>
+			<artifactId>cssbox</artifactId>
+			<version>4.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.reactivex/rxjava -->
+		<dependency>
+			<groupId>io.reactivex</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>1.3.8</version>
+		</dependency>
 	</dependencies>
 
 	<build>

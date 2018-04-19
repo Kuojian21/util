@@ -57,7 +57,7 @@ public class Kafka {
 	}
 
 	public static void main(String[] args) {
-		demoConsume();
+//		demoConsume();
 		for(int i = 0 ; i < 10;i++) {
 			demoProduce();
 		}
