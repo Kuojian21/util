@@ -1,4 +1,4 @@
-package com.lambda;
+package com.test.lambda;
 import java.util.function.Supplier;
 
 import org.springframework.util.ReflectionUtils;

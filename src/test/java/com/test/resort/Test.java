@@ -1,4 +1,4 @@
-package com.resort;
+package com.test.resort;
 
 public class Test {
 

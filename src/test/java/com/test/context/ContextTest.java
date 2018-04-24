@@ -1,4 +1,4 @@
-package com.context;
+package com.test.context;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
