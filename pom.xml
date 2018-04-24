@@ -264,13 +264,6 @@
 			<artifactId>html2image</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.lobobrowser</groupId>
-			<artifactId>cobra</artifactId>
-			<version>0.98.4</version>
-			<scope>system</scope>
-			<systemPath>D:/soft/Java/lib/lobo-distro-0.98.4/lobo.jar</systemPath>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sf.cssbox/cssbox -->
 		<dependency>
 			<groupId>net.sf.cssbox</groupId>
