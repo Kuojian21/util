@@ -51,9 +51,9 @@ public class LockTest {
 			@Override
 			public void run() {
 				try {
-					lx.await();
 					synchronized (y) {
 						ly.countDown();
+						lx.await();
 						synchronized (x) {
 
 						}
@@ -85,9 +85,9 @@ public class LockTest {
 			@Override
 			public void run() {
 				try {
-					lx1.await();
 					y1.lock();
 					ly1.countDown();
+					lx1.await();
 					x1.lock();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -117,9 +117,9 @@ public class LockTest {
 			@Override
 			public void run() {
 				try {
-					lx2.await();
 					y2.lock();
 					ly2.countDown();
+					lx2.await();
 					synchronized(x2) {
 						
 					}
@@ -128,6 +128,55 @@ public class LockTest {
 				}
 			}
 		}, "y2").start();
+		
+		ReentrantLock x3 = new ReentrantLock();
+		ReentrantLock y3 = new ReentrantLock();
+		ReentrantLock z3 = new ReentrantLock();
+		CountDownLatch lx3 = new CountDownLatch(1);
+		CountDownLatch ly3 = new CountDownLatch(1);
+		CountDownLatch lz3 = new CountDownLatch(1);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					synchronized(x3) {
+						lx3.countDown();
+						ly3.await();
+						y3.lock();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, "x3").start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					y3.lock();
+					ly3.countDown();
+					lz3.await();
+					z3.lock();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, "y3").start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					z3.lock();
+					lz3.countDown();
+					lx3.await();
+					synchronized(x3) {
+						
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, "z3").start();
 		
 	}
 }

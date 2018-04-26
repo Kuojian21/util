@@ -20,6 +20,8 @@ public class MulticastTest extends Thread {
 							byte buff[] = new byte[8192];
 							DatagramPacket packet = new DatagramPacket(buff, buff.length);
 							socket.receive(packet);
+							System.out.println(socket.getLocalAddress().getHostName());
+							System.out.println(socket.getLocalPort());
 							System.out.println(new String(packet.getData(), 0, packet.getLength()));
 						}
 					} catch (Exception e) {
@@ -40,8 +42,10 @@ public class MulticastTest extends Thread {
 				try {
 					while (true) {
 						byte buff[] = new byte[8192];
+						System.out.println(socket.getLocalAddress().getHostName());
 						DatagramPacket packet = new DatagramPacket(buff, buff.length);
 						socket.receive(packet);
+						System.out.println(socket.getLocalPort());
 						System.out.println(new String(packet.getData(), 0, packet.getLength()));
 					}
 				} catch (Exception e) {
@@ -61,7 +65,7 @@ public class MulticastTest extends Thread {
 							byte buff[] = msg.getBytes();
 							DatagramPacket packet = new DatagramPacket(buff, buff.length, group, 8888);
 							socket.send(packet);
-							sleep(2000);
+							sleep(10000);
 						}
 					}
 				} catch (Exception e) {
