@@ -39,7 +39,7 @@ public class AvlTree<T> {
 
 	protected int compareTo(T t1, T t2) {
 		if (t1.getClass().isAssignableFrom(Integer.class)) {
-			return (int) t1 - (int) t2;
+			return (Integer) t1 - (Integer) t2;
 		}
 		return -1;
 	}
