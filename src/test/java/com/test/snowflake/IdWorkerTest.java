@@ -2,11 +2,11 @@ package com.test.snowflake;
 
 import java.util.concurrent.CountDownLatch;
 
-import com.snowfake.IdWorker;
+import com.snowflake.Snowflake;
 
 public class IdWorkerTest {
 	public static void main(String[] args) throws InterruptedException {
-		IdWorker worker = new IdWorker(1);
+		Snowflake worker = new Snowflake(1);
 		CountDownLatch latch = new CountDownLatch(100);
 		long s = System.currentTimeMillis();
 		for(int i = 0 ;i < 100;i++) {

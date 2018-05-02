@@ -1,9 +1,9 @@
-package com.snowfake;
+package com.snowflake;
 
 /**
  * @author bjzhangkuojian
  */
-public class IdWorker {
+public class Snowflake {
 
 	private static final int WORKER_BIT = 10;
 	private static final int WORKER_MASK = -1 ^ (-1 << WORKER_BIT);
@@ -15,7 +15,7 @@ public class IdWorker {
 	private int workerId;
 	private int sequence = 0;
 
-	public IdWorker(int workerId) {
+	public Snowflake(int workerId) {
 		this.workerId = workerId & WORKER_MASK;
 	}
 	
