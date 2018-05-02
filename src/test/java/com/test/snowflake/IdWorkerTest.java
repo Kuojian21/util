@@ -22,5 +22,6 @@ public class IdWorkerTest {
 		}
 		latch.await();
 		System.out.println(System.currentTimeMillis() - s);
+		System.out.println(Long.toHexString(365 * 24 * 3600 * 1000));
 	}
 }
