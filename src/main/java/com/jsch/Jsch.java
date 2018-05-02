@@ -1,10 +1,8 @@
 package com.jsch;
 
-import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
-import java.util.Vector;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -16,10 +14,7 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.ChannelSftp.LsEntry;
 import com.jcraft.jsch.SftpException;
-import com.tools.io.StreamTool;
-import com.tools.logger.LogConstant;
 
 public class Jsch {
 
@@ -62,6 +57,11 @@ public class Jsch {
 			}
 
 		}, config);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				Jsch.this.pool.close();
+			}
+		});
 	}
 
 	public Jsch(String host, int port, String username, String prvfile, String pubfile, byte[] passphrase) {
@@ -101,24 +101,50 @@ public class Jsch {
 			}
 
 		}, config);
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				Jsch.this.pool.close();
+			}
+		});
 	}
 
-	public void upload(String directory, String file, InputStream is) {
+	public boolean upload(String directory, String file, InputStream is) {
 		ChannelSftp sftp = null;
 		String root = null;
 		try {
 			sftp = pool.borrowObject();
 			root = sftp.pwd();
-			if(Strings.isNullOrEmpty(directory)) {
-				if(sftp.stat(directory) == null) {
-					sftp.mkdir(directory);
+			if (!Strings.isNullOrEmpty(directory)) {
+				String[] dirs = directory.split("/");
+				for (String dir : dirs) {
+					if (!Strings.isNullOrEmpty(dir)) {
+						try {
+							sftp.cd(dir);
+						} catch (SftpException sException) {
+							if (ChannelSftp.SSH_FX_NO_SUCH_FILE == sException.id) {
+								sftp.mkdir(dir);
+								sftp.cd(dir);
+							} else {
+								return false;
+							}
+						}
+					}
 				}
-				sftp.cd(directory);
 			}
 			sftp.put(is, file);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			if (Strings.isNullOrEmpty(root)) {
 				try {
 					sftp.cd(root);
@@ -127,31 +153,34 @@ public class Jsch {
 				}
 			}
 			if (sftp != null) {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
 				pool.returnObject(sftp);
 			}
 		}
 	}
 
-	public void download(String directory, String file, OutputStream os) {
+	public boolean download(String directory, String file, OutputStream os) {
 		ChannelSftp sftp = null;
 		String root = null;
 		try {
 			sftp = pool.borrowObject();
 			root = sftp.pwd();
-			Jsch.changeDir(sftp, directory);
-			BufferedOutputStream bos = StreamTool.buffer(os);
-			sftp.get(file, bos);
-			bos.flush();
+			if (!Strings.isNullOrEmpty(directory)) {
+				sftp.cd(directory);
+			}
+			sftp.get(file, os);
+			os.flush();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		} finally {
+			if (os != null) {
+				try {
+					os.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			if (Strings.isNullOrEmpty(root)) {
 				try {
 					sftp.cd(root);
@@ -160,42 +189,9 @@ public class Jsch {
 				}
 			}
 			if (sftp != null) {
-				if (os != null) {
-					try {
-						os.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
 				pool.returnObject(sftp);
 			}
 		}
-	}
-
-	public static void changeDir(ChannelSftp sftp, String directory) throws SftpException {
-		String module = "修改目录";
-		if (!Strings.isNullOrEmpty(directory)) {
-			String[] dirs = directory.split("/");
-			for (String dir : dirs) {
-				if (Strings.isNullOrEmpty(dir)) {
-					continue;
-				}
-				Vector<?> vector = sftp.ls(".");
-				boolean exist = false;
-				for (Object item : vector) {
-					LsEntry entry = (LsEntry) item;
-					if (dir.equals(entry.getFilename())) {
-						exist = true;
-						break;
-					}
-				}
-				if (!exist) {
-					sftp.mkdir(dir);
-				}
-				sftp.cd(dir);
-			}
-		}
-		LogConstant.runLog.info(module, "结束", "dir=" + sftp.pwd());
 	}
 
 }
