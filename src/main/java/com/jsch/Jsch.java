@@ -101,7 +101,6 @@ public class Jsch {
 			}
 
 		}, config);
-
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				Jsch.this.pool.close();

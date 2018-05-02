@@ -39,6 +39,12 @@ public class Encrypt extends Crypt {
 			}
 
 		}, config);
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				Encrypt.this.pool.close();
+			}
+		});
 	}
 
 	public String encrypt(String str) {

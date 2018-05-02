@@ -8,7 +8,6 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
 import com.google.common.base.Strings;
 
 public class Decrypt extends Crypt{
@@ -40,6 +39,11 @@ public class Decrypt extends Crypt{
 			}
 
 		}, config);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				Decrypt.this.pool.close();
+			}
+		});
 	}
 	
 	public String decrypt(String str) {
