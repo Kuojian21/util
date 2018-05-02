@@ -13,10 +13,9 @@ public class IdWorkerTest {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					for(int i = 0;i < 10000;i++) {
+					while(true) {
 						System.out.println(Long.toHexString(worker.nextId()));
 					}
-					latch.countDown();
 				}
 			}).start();
 		}
