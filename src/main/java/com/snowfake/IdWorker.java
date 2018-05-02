@@ -18,7 +18,9 @@ public class IdWorker {
 	public IdWorker(int workerId) {
 		this.workerId = workerId & WORKER_MASK;
 	}
-
+	
+	
+	
 	public long nextId() {
 		int seq = 0;
 		synchronized (this) {

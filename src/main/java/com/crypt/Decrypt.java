@@ -24,7 +24,12 @@ public class Decrypt extends Crypt{
 		pool = new GenericObjectPool<>(new BasePooledObjectFactory<Cipher>() {
 			@Override
 			public PooledObject<Cipher> wrap(Cipher cipher) {
-				return new DefaultPooledObject<Cipher>(cipher);
+				return new DefaultPooledObject<Cipher>(cipher) {
+					@Override
+				    public void invalidate() {
+				        super.invalidate();
+				    }
+				};
 			}
 
 			@Override
