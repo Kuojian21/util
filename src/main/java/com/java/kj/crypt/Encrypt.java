@@ -1,4 +1,4 @@
-package com.crypt;
+package com.java.kj.crypt;
 
 import javax.crypto.Cipher;
 import org.apache.commons.codec.binary.Base64;

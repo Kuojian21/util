@@ -1,4 +1,4 @@
-package com.jedis;
+package com.java.kj.jedis;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -19,6 +19,11 @@ public class JedisTemplate {
 
 	public JedisTemplate(Pool<Jedis> pool) {
 		this.pool = pool;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				JedisTemplate.this.pool.close();
+			}
+		});
 	}
 
 	public interface JedisAction<T> {

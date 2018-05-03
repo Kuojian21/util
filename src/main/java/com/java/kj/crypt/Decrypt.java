@@ -1,4 +1,4 @@
-package com.crypt;
+package com.java.kj.crypt;
 
 import javax.crypto.Cipher;
 

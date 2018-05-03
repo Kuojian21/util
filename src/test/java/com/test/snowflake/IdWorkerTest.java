@@ -2,7 +2,7 @@ package com.test.snowflake;
 
 import java.util.concurrent.CountDownLatch;
 
-import com.snowflake.Snowflake;
+import com.java.kj.snowflake.Snowflake;
 
 public class IdWorkerTest {
 	public static void main(String[] args) throws InterruptedException {

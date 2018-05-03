@@ -11,9 +11,9 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import com.crypt.Decrypt;
-import com.crypt.Encrypt;
 import com.google.common.collect.Lists;
+import com.java.kj.crypt.Decrypt;
+import com.java.kj.crypt.Encrypt;
 
 public class CryptTest {
 

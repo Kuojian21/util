@@ -1,4 +1,4 @@
-package com.jsch;
+package com.java.kj.jsch;
 
 import java.io.InputStream;
 import java.io.OutputStream;

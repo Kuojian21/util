@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import com.jsch.Jsch;
+import com.java.kj.jsch.Jsch;
 import com.tools.io.StreamTool;
 
 public class JschTest {

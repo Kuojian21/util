@@ -1,4 +1,4 @@
-package com.snowflake;
+package com.java.kj.snowflake;
 
 /**
  * @author bjzhangkuojian
