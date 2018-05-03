@@ -1,6 +1,7 @@
 package com.test.kafka;
 
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -31,8 +32,7 @@ public class Kafka {
 							new Callback() {
 								@Override
 								public void onCompletion(RecordMetadata metadata, Exception exception) {
-									System.out.println(Thread.currentThread().getName());
-									new Exception().printStackTrace();
+									/* new Exception().printStackTrace(); */
 									if (exception != null) {
 										exception.printStackTrace();
 									}
@@ -47,19 +47,47 @@ public class Kafka {
 			@Override
 			public void run() {
 				Properties props = new Properties();
-				props.put("bootstrap.servers", "10.200.142.37:9097,10.200.142.38:9097,10.200.142.39:9097");
+				props.put("bootstrap.servers", "10.200.142.35:9090,10.200.142.36:9090,10.200.142.37:9090");
 				props.put("group.id", "12");
 				props.put("enable.auto.commit", "false");
 				props.put("auto.commit.interval.ms", "1000");
 				props.put("session.timeout.ms", "30000");
 				props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 				props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+				AtomicInteger count = new AtomicInteger(0);
 				new Consumer<String, String>(props, new Action<String, String>() {
 					@Override
 					public void doAction(ConsumerRecords<String, String> records) {
 						for (ConsumerRecord<String, String> record : records) {
-							System.out.println("fetched from partition " + record.partition() + ", offset: "
-									+ record.offset() + ", message: " + record.value());
+							System.out.println(
+									"fetched from partition " + record.partition() + ", offset: " + record.offset()
+											+ ", message: " + record.value() + ",count=" + count.incrementAndGet());
+						}
+					}
+				}, topic);
+
+			}
+
+		}).start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Properties props = new Properties();
+				props.put("bootstrap.servers", "10.200.142.35:9090,10.200.142.36:9090,10.200.142.37:9090");
+				props.put("group.id", "12");
+				props.put("enable.auto.commit", "false");
+				props.put("auto.commit.interval.ms", "1000");
+				props.put("session.timeout.ms", "30000");
+				props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+				props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+				AtomicInteger count = new AtomicInteger(0);
+				new Consumer<String, String>(props, new Action<String, String>() {
+					@Override
+					public void doAction(ConsumerRecords<String, String> records) {
+						for (ConsumerRecord<String, String> record : records) {
+							System.out.println("Thread2:fetched from partition " + record.partition() + ", offset: "
+									+ record.offset() + ", message: " + record.value() + ",count="
+									+ count.incrementAndGet());
 						}
 					}
 				}, topic);
