@@ -1,5 +1,8 @@
 package com.tools.zxing;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
@@ -14,7 +17,7 @@ import com.google.zxing.common.BitMatrix;
 
 public class ZxingTool {
 
-	public OutputStream image(String content, OutputStream out) {
+	public OutputStream matrix(String content, OutputStream out) {
 		try {
 			MultiFormatWriter writer = new MultiFormatWriter();
 			Map<EncodeHintType, String> hints = Maps.newHashMap();
@@ -26,6 +29,10 @@ public class ZxingTool {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		new ZxingTool().matrix("https://www.lmlc.com", new FileOutputStream(new File("text.jpg")));
 	}
 
 }
