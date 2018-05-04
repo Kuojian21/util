@@ -1,4 +1,4 @@
-package com.quartz.demo;
+package com.tools.quartz.demo;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;

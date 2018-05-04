@@ -1,4 +1,4 @@
-package com.property.demo;
+package com.tools.property.demo;
 
 import java.lang.reflect.InvocationTargetException;
 

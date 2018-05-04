@@ -1,4 +1,4 @@
-package com.netty;   
+package com.tools.netty;   
   
 import org.jboss.netty.bootstrap.ClientBootstrap;   
 import org.jboss.netty.channel.*;   
