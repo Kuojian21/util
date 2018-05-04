@@ -1,6 +1,5 @@
 package com.java.kj.netty;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -11,25 +10,16 @@ import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
-
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import com.java.kj.crypt.Decrypt;
-
 import java.net.InetSocketAddress;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
-import javax.crypto.Cipher;
 
 public class Client {
 
 	private static final ClientBootstrap BOOTSTRAP;
 	private static final ConcurrentMap<Integer, Handler> ACTIONS = Maps.newConcurrentMap();
-	private static final ConcurrentMap<Integer,Handler> LATCHS = Maps.newConcurrentMap();
 	static {
 		BOOTSTRAP = new ClientBootstrap(
 				new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
@@ -98,7 +88,7 @@ public class Client {
 		});
 	}
 	
-	public Future handle(Handler handler) {
+	public void handle(Handler handler) {
 		Channel channel = null;
 		try {
 			channel = pool.borrowObject();
@@ -111,8 +101,6 @@ public class Client {
 				pool.returnObject(channel);
 			}
 		}
-		
-		return null;
 	}
 	
 	
