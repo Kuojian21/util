@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Client {
 
 	private static final ClientBootstrap BOOTSTRAP;
-	private static final ConcurrentMap<Integer, Holder> HOLDERS = Maps.newConcurrentMap();
+	private static final ConcurrentMap<Integer, ConcurrentMap<Long, ResponseFuture>> HOLDERS = Maps.newConcurrentMap();
 	static {
 		BOOTSTRAP = new ClientBootstrap(
 				new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
@@ -32,8 +32,13 @@ public class Client {
 					@Override
 					public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 						if (e.getMessage() instanceof String) {
-							Response<?> response = JSON.parseObject((String)e.getMessage(), Response.class);
-							HOLDERS.get(ctx.getChannel().getId()).futures.remove(response.getId()).set(response);
+							try {
+								Response<?> response = JSON.parseObject((String) e.getMessage(), Response.class);
+								HOLDERS.get(ctx.getChannel().getId()).remove(response.getId()).set(response);
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								System.out.println(e.getMessage());
+							}
 						}
 						super.messageReceived(ctx, e);
 					}
@@ -58,53 +63,38 @@ public class Client {
 		});
 	}
 
-	private static class Holder {
-		public final AtomicLong id;
-		public final Channel channel;
-		public final ConcurrentMap<Long, ResponseFuture> futures;
+	private final GenericObjectPool<Channel> pool;
+	private final AtomicLong id;
+	private final ConcurrentMap<Long, ResponseFuture> futures;
+	private final int workId;
 
-		public Holder(Channel channel) {
-			super();
-			this.channel = channel;
-			id = new AtomicLong(0);
-			futures = Maps.newConcurrentMap();
-		}
+	public Client(int workId, String ip, int port) {
+		this.id = new AtomicLong(0);
+		this.futures = Maps.newConcurrentMap();
+		this.workId = workId;
 
-		public <R> ResponseFuture write(R data) throws Exception {
-			Request<R> request = new Request<R>(id.incrementAndGet(), data);
-			ResponseFuture future = new ResponseFuture();
-			this.futures.put(request.getId(), future);
-			this.channel.write(JSON.toJSONString(request)).await();
-			return future;
-		}
-	}
-
-	private final GenericObjectPool<Holder> pool;
-
-	public Client(String ip, int port) {
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(-1);
 		config.setMaxTotal(100);
 		config.setMaxWaitMillis(30000);
-		pool = new GenericObjectPool<Holder>(new BasePooledObjectFactory<Holder>() {
+		pool = new GenericObjectPool<Channel>(new BasePooledObjectFactory<Channel>() {
 			@Override
-			public PooledObject<Holder> wrap(Holder holder) {
-				return new DefaultPooledObject<Holder>(holder) {
+			public PooledObject<Channel> wrap(Channel channel) {
+				return new DefaultPooledObject<Channel>(channel) {
 					@Override
 					public void invalidate() {
-						holder.channel.close();
-						HOLDERS.remove(holder.channel.getId());
+						channel.close();
+						HOLDERS.remove(channel.getId());
 						super.invalidate();
 					}
 				};
 			}
 
 			@Override
-			public Holder create() throws Exception {
+			public Channel create() throws Exception {
 				ChannelFuture future = BOOTSTRAP.connect(new InetSocketAddress(ip, port)).await();
-				Holder holder = new Holder(future.getChannel());
-				HOLDERS.put(holder.channel.getId(), holder);
-				return holder;
+				HOLDERS.put(future.getChannel().getId(), futures);
+				return future.getChannel();
 
 			}
 		}, config);
@@ -116,12 +106,15 @@ public class Client {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <R, Q> Q send(R data,boolean sync) {
-		Holder holder = null;
+	public <R, Q> Q send(R data, boolean sync) {
+		Channel holder = null;
 		try {
 			holder = pool.borrowObject();
-			ResponseFuture future =  holder.write(data);
-			if(sync) {
+			Request request = new Request(workId, id.incrementAndGet(), data);
+			ResponseFuture future = new ResponseFuture();
+			this.futures.put(request.getId(), future);
+			holder.write(JSON.toJSONString(request)).await();
+			if (sync) {
 				return (Q) future.get().getData();
 			}
 		} catch (Exception e) {

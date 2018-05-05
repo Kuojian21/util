@@ -1,16 +1,18 @@
 package com.java.kj.netty;
 
-public class Request<R> {
+public class Request {
 
 	private long id;
-	private R data;
+	private int workId;
+	private Object data;
 
 	public Request() {
 		
 	}
 	
-	public Request(long id, R data) {
+	public Request(int workId,long id, Object data) {
 		super();
+		this.workId = workId;
 		this.id = id;
 		this.data = data;
 	}
@@ -23,11 +25,19 @@ public class Request<R> {
 		this.id = id;
 	}
 
-	public R getData() {
+	public int getWorkId() {
+		return workId;
+	}
+
+	public void setWorkId(int workId) {
+		this.workId = workId;
+	}
+
+	public Object getData() {
 		return data;
 	}
 
-	public void setData(R data) {
+	public void setData(Object data) {
 		this.data = data;
 	}
 
