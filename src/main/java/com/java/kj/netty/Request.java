@@ -17,6 +17,12 @@ public class Request {
 		this.data = data;
 	}
 
+	public Request(long id, Object data) {
+		super();
+		this.id = id;
+		this.data = data;
+	}
+
 	public long getId() {
 		return id;
 	}
