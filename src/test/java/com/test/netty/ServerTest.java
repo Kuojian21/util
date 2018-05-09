@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import com.java.kj.netty.Server;
+import com.java.kj.netty.KjServer;
 
 public class ServerTest {
 
@@ -13,7 +13,7 @@ public class ServerTest {
 		map.put("1", "Red");
 		map.put("2", "white");
 		map.put("3", "blue");
-		Server.bind(8888, new Server.Action() {
+		KjServer.bind(8888, new KjServer.Action() {
 			@Override
 			public Object action(Object data) {
 				String r = map.get(data);

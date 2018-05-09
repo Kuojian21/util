@@ -10,11 +10,11 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import com.google.common.base.Strings;
 
-public class Decrypt extends Crypt{
+public class KjDecrypt extends Crypt{
 
 	private GenericObjectPool<Cipher> pool;
 
-	public Decrypt(String algorithm, String padding, String keyAlgorithm, String keyValue) {
+	public KjDecrypt(String algorithm, String padding, String keyAlgorithm, String keyValue) {
 		super(algorithm, padding, keyAlgorithm, keyValue);
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(10);
@@ -33,15 +33,15 @@ public class Decrypt extends Crypt{
 
 			@Override
 			public Cipher create() throws Exception {
-				Cipher cipher = Cipher.getInstance(Decrypt.this.getAlgorithm());
-				cipher.init(Cipher.DECRYPT_MODE, Decrypt.this.getKey(), Decrypt.this.getIvp());
+				Cipher cipher = Cipher.getInstance(KjDecrypt.this.getAlgorithm());
+				cipher.init(Cipher.DECRYPT_MODE, KjDecrypt.this.getKey(), KjDecrypt.this.getIvp());
 				return cipher;
 			}
 
 		}, config);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				Decrypt.this.pool.close();
+				KjDecrypt.this.pool.close();
 			}
 		});
 	}

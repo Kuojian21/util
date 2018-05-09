@@ -1,6 +1,6 @@
 package com.java.kj.netty;
 
-public class Request {
+class Request {
 
 	private long id;
 	private int workId;

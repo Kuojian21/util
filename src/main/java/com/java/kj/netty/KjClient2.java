@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Client2 {
+public class KjClient2 {
 
 	private static final ClientBootstrap BOOTSTRAP;
 	private static final ConcurrentMap<Integer, Holder> HOLDERS = Maps.newConcurrentMap();
@@ -81,7 +81,7 @@ public class Client2 {
 
 	private final GenericObjectPool<Holder> pool;
 
-	public Client2(String ip, int port) {
+	public KjClient2(String ip, int port) {
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(-1);
 		config.setMaxTotal(100);
@@ -110,7 +110,7 @@ public class Client2 {
 		}, config);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				Client2.this.pool.close();
+				KjClient2.this.pool.close();
 			}
 		});
 	}

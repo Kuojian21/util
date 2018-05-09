@@ -13,15 +13,15 @@ import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.Pipeline;
 import redis.clients.util.Pool;
 
-public class JedisTemplate {
+public class KjJedis {
 
 	private Pool<Jedis> pool;
 
-	public JedisTemplate(Pool<Jedis> pool) {
+	public KjJedis(Pool<Jedis> pool) {
 		this.pool = pool;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				JedisTemplate.this.pool.close();
+				KjJedis.this.pool.close();
 			}
 		});
 	}
@@ -99,7 +99,7 @@ public class JedisTemplate {
 				new Class<?>[] { JedisCommands.class }, new InvocationHandler() {
 					@Override
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						return JedisTemplate.this.execute(new JedisAction<Object>() {
+						return KjJedis.this.execute(new JedisAction<Object>() {
 							@Override
 							public Object action(Jedis jedis) {
 								try {
@@ -114,7 +114,7 @@ public class JedisTemplate {
 	}
 	
 	public static void main(String[] args) {
-		JedisTemplate jedisTemplate = new JedisTemplate(new JedisSentinelPool("master",
+		KjJedis jedisTemplate = new KjJedis(new JedisSentinelPool("master",
 				Sets.newHashSet("10.200.142.34:26381", "10.200.142.32:26381"), "wwfsjr_test"));
 		long b = System.currentTimeMillis();
 		for (int i = 0; i < 100; i++) {

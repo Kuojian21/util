@@ -12,16 +12,16 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.google.common.collect.Lists;
-import com.java.kj.crypt.Decrypt;
-import com.java.kj.crypt.Encrypt;
+import com.java.kj.crypt.KjDecrypt;
+import com.java.kj.crypt.KjEncrypt;
 
 public class CryptTest {
 
 	public static void main(String[] args) {
 		try {
-			Encrypt encrypt = new Encrypt("DESede/CBC/PKCS5Padding", "01234567", "DESede",
+			KjEncrypt encrypt = new KjEncrypt("DESede/CBC/PKCS5Padding", "01234567", "DESede",
 					"wnwT1v1kkhoEwnnEGSnE6ciw6S8E4w5U");
-			Decrypt decrypt = new Decrypt("DESede/CBC/PKCS5Padding", "01234567", "DESede",
+			KjDecrypt decrypt = new KjDecrypt("DESede/CBC/PKCS5Padding", "01234567", "DESede",
 					"wnwT1v1kkhoEwnnEGSnE6ciw6S8E4w5U");
 			GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 			config.setMinIdle(10);

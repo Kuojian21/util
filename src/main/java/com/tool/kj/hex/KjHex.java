@@ -1,6 +1,6 @@
 package com.tool.kj.hex;
 
-public class Hex {
+public class KjHex {
 
 	public static final String STR = "0123456789ABCDEF";
 

@@ -8,9 +8,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import com.java.kj.kafka.Consumer;
-import com.java.kj.kafka.Consumer.Action;
-import com.java.kj.kafka.Producer;
+import com.java.kj.kafka.KjConsumer;
+import com.java.kj.kafka.KjConsumer.Action;
+import com.java.kj.kafka.KjProducer;
 
 public class KafkaTest {
 
@@ -79,7 +79,7 @@ public class KafkaTest {
 	public static void main(String[] args) {
 		String topic = "KJ_TEST";
 		Properties props = producerProps();
-		Producer<String, String> producer = new Producer<String, String>(props);
+		KjProducer<String, String> producer = new KjProducer<String, String>(props);
 		for(int i = 0;i < 2;i++) {
 			new Thread(new Runnable() {
 				@Override
@@ -114,7 +114,7 @@ public class KafkaTest {
 				props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 				props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 				AtomicInteger count = new AtomicInteger(0);
-				new Consumer<String, String>(props, new Action<String, String>() {
+				new KjConsumer<String, String>(props, new Action<String, String>() {
 					@Override
 					public void doAction(ConsumerRecords<String, String> records) {
 						for (ConsumerRecord<String, String> record : records) {
@@ -140,7 +140,7 @@ public class KafkaTest {
 				props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 				props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 				AtomicInteger count = new AtomicInteger(0);
-				new Consumer<String, String>(props, new Action<String, String>() {
+				new KjConsumer<String, String>(props, new Action<String, String>() {
 					@Override
 					public void doAction(ConsumerRecords<String, String> records) {
 						for (ConsumerRecord<String, String> record : records) {

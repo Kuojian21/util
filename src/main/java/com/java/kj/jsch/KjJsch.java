@@ -16,11 +16,11 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
-public class Jsch {
+public class KjJsch {
 
 	private GenericObjectPool<ChannelSftp> pool;
 
-	public Jsch(String host, int port, String username, String password) {
+	public KjJsch(String host, int port, String username, String password) {
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(10);
 		config.setMaxTotal(100);
@@ -59,12 +59,12 @@ public class Jsch {
 		}, config);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				Jsch.this.pool.close();
+				KjJsch.this.pool.close();
 			}
 		});
 	}
 
-	public Jsch(String host, int port, String username, String prvfile, String pubfile, byte[] passphrase) {
+	public KjJsch(String host, int port, String username, String prvfile, String pubfile, byte[] passphrase) {
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(10);
 		config.setMaxTotal(100);
@@ -103,7 +103,7 @@ public class Jsch {
 		}, config);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				Jsch.this.pool.close();
+				KjJsch.this.pool.close();
 			}
 		});
 	}

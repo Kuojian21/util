@@ -10,11 +10,11 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.google.common.base.Strings;
 
-public class Encrypt extends Crypt {
+public class KjEncrypt extends Crypt {
 
 	private GenericObjectPool<Cipher> pool;
 
-	public Encrypt(String algorithm, String padding, String keyAlgorithm, String keyValue) {
+	public KjEncrypt(String algorithm, String padding, String keyAlgorithm, String keyValue) {
 		super(algorithm, padding, keyAlgorithm, keyValue);
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(10);
@@ -33,8 +33,8 @@ public class Encrypt extends Crypt {
 
 			@Override
 			public Cipher create() throws Exception {
-				Cipher cipher = Cipher.getInstance(Encrypt.this.getAlgorithm());
-				cipher.init(Cipher.ENCRYPT_MODE, Encrypt.this.getKey(), Encrypt.this.getIvp());
+				Cipher cipher = Cipher.getInstance(KjEncrypt.this.getAlgorithm());
+				cipher.init(Cipher.ENCRYPT_MODE, KjEncrypt.this.getKey(), KjEncrypt.this.getIvp());
 				return cipher;
 			}
 
@@ -42,7 +42,7 @@ public class Encrypt extends Crypt {
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				Encrypt.this.pool.close();
+				KjEncrypt.this.pool.close();
 			}
 		});
 	}

@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Client {
+public class KjClient {
 
 	private static final ClientBootstrap BOOTSTRAP;
 	private static final ConcurrentMap<Integer, ConcurrentMap<Long, ResponseFuture>> HOLDERS = Maps.newConcurrentMap();
@@ -68,7 +68,7 @@ public class Client {
 	private final ConcurrentMap<Long, ResponseFuture> futures;
 	private final int workId;
 
-	public Client(int workId, String ip, int port) {
+	public KjClient(int workId, String ip, int port) {
 		this.id = new AtomicLong(0);
 		this.futures = Maps.newConcurrentMap();
 		this.workId = workId;
@@ -100,7 +100,7 @@ public class Client {
 		}, config);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
-				Client.this.pool.close();
+				KjClient.this.pool.close();
 			}
 		});
 	}

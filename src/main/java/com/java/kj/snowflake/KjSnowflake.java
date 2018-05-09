@@ -3,7 +3,7 @@ package com.java.kj.snowflake;
 /**
  * @author bjzhangkuojian
  */
-public class Snowflake {
+public class KjSnowflake {
 
 	private static final int WORKER_BIT = 10;
 	private static final int WORKER_MASK = -1 ^ (-1 << WORKER_BIT);
@@ -15,7 +15,7 @@ public class Snowflake {
 	private int workerId;
 	private int sequence = 0;
 
-	public Snowflake(int workerId) {
+	public KjSnowflake(int workerId) {
 		this.workerId = workerId & WORKER_MASK;
 	}
 	

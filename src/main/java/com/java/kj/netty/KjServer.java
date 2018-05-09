@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class Server {
+public class KjServer {
 
 	private static final ServerBootstrap BOOTSTRAP;
 	private static final ConcurrentMap<Integer, Action> ACTIONS = Maps.newConcurrentMap();
@@ -122,7 +122,7 @@ public class Server {
 		}
 	}
 
-	private Server() {
+	private KjServer() {
 
 	}
 

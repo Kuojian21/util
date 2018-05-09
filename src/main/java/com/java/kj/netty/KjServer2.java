@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 
-public class Server2 {
+public class KjServer2 {
 
 	private static final ServerBootstrap BOOTSTRAP;
 	private static final ConcurrentMap<Integer, Action> ACTIONS = Maps.newConcurrentMap();
@@ -64,7 +64,7 @@ public class Server2 {
 		ACTIONS.put(port, action);
 	}
 	
-	private Server2(){
+	private KjServer2(){
 		
 	}
 

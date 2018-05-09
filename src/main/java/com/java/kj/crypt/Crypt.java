@@ -13,7 +13,7 @@ import javax.crypto.spec.IvParameterSpec;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class Crypt {
+class Crypt {
 
 	static {
 		Security.addProvider(new BouncyCastleProvider());

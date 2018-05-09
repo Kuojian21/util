@@ -1,6 +1,6 @@
 package com.java.kj.netty;
 
-public class Response<Q> {
+class Response<Q> {
 
 	private long id;
 	private Q data;

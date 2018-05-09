@@ -1,8 +1,5 @@
 package com.java.kj.slide;
 
-import java.math.BigDecimal;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,14 +9,10 @@ import com.google.common.collect.Maps;
 
 public class KjSlide {
 
-	private static final long EPOCH = 1344322705519L;
-
+	private static final long EPOCH = 102530117577364L;
 	private final ConcurrentMap<Long, AtomicInteger> windows = Maps.newConcurrentMap();
-	private final AtomicInteger count = new AtomicInteger(0);
-
+	private final AtomicLong count = new AtomicLong(0);
 	private final AtomicLong index;
-	private final AtomicLong last;
-
 	private TimeUnit unit;
 	private long grain;
 	private int size;
@@ -28,35 +21,45 @@ public class KjSlide {
 	public KjSlide(int period, TimeUnit unit, long rate) {
 		this.unit = unit;
 		this.rate = rate;
-		this.grain = this.nextUnit().toMillis(1);
-		this.last = new AtomicLong((System.currentTimeMillis() - EPOCH) / this.grain);
-		this.size = (int) (unit.toMillis(1) / this.grain);
-		this.index = new AtomicLong(this.last);
-		this.windows.putIfAbsent(this.index.get(), new AtomicInteger(0));
-		for (int i = 1; i < size; i++) {
-			this.windows.putIfAbsent(this.index.get(), new AtomicInteger(0));
-			this.index.decrementAndGet();
-		}
-	}
-
-	public boolean add() {
-		long last = (System.currentTimeMillis() - EPOCH) / this.grain;
-		
-		while(true) {
-			
-		}
-	}
-
-	public TimeUnit nextUnit() {
-		TimeUnit l = TimeUnit.MILLISECONDS;
+		TimeUnit grainUnit = TimeUnit.NANOSECONDS;
 		for (TimeUnit u : TimeUnit.values()) {
 			if (u.equals(this.unit)) {
-				return l;
+				break;
 			} else {
-				l = u;
+				grainUnit = u;
 			}
 		}
-		return l;
+		this.grain = grainUnit.toNanos(1);
+		this.size = (int) (unit.toNanos(1) / this.grain * period);
+		this.index = new AtomicLong((System.nanoTime() - EPOCH) / this.grain - this.size + 1);
+	}
+
+	public boolean tryAcquire() {
+		long last = (System.nanoTime() - EPOCH) / this.grain;
+		
+		long upper = last - this.size;
+		long i = this.index.get();
+		while (i <= upper) {
+			if (this.index.compareAndSet(i, ++i)) {
+				AtomicInteger t = this.windows.remove(i);
+				if (t != null) {
+					this.count.addAndGet(-t.get());
+				}
+			}
+		}
+		
+		if (this.count.get() >= this.rate) {
+			return false;
+		}
+		
+		AtomicInteger c = this.windows.get(last);
+		if (c == null) {
+			this.windows.putIfAbsent(last, new AtomicInteger(0));
+			c = this.windows.get(last);
+		}
+
+		c.incrementAndGet();
+		return this.count.incrementAndGet() <= this.rate;
 	}
 
 }

@@ -16,7 +16,7 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.consumer.OffsetCommitCallback;
 import org.apache.kafka.common.TopicPartition;
 
-public class Consumer<K, V> {
+public class KjConsumer<K, V> {
 
 	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
@@ -35,7 +35,7 @@ public class Consumer<K, V> {
 
 	private KafkaConsumer<K, V> consumer = null;
 
-	public Consumer(Properties props, Action<K, V> action, String... topic) {
+	public KjConsumer(Properties props, Action<K, V> action, String... topic) {
 		consumer = new KafkaConsumer<K, V>(props);
 		consumer.subscribe(Arrays.asList(topic),new ConsumerRebalanceListener() {
 
@@ -76,8 +76,8 @@ public class Consumer<K, V> {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				Consumer.this.consumer.close();
-				Consumer.this.consumer.wakeup();
+				KjConsumer.this.consumer.close();
+				KjConsumer.this.consumer.wakeup();
 			}
 		});
 	}
