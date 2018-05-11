@@ -7,6 +7,7 @@ public abstract class KjPool<T, R> {
 			public void run() {
 				try {
 					KjPool.this.close();
+					System.out.println("close com.java.kj.base.KjPool:" + KjPool.this.getClass().getName());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

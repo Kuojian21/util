@@ -1,51 +1,198 @@
 package com.test.jedis;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.java.kj.jedis.KjJedis;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
 public class JedisTest {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		int circle = 10;
+		int tasks = 1000;
+		String str = "201803292024CORDER49316246";
+		if (args.length == 3) {
+			circle = Integer.parseInt(args[0]);
+			tasks = Integer.parseInt(args[1]);
+			str = args[2];
+		}
+		String value = str;
+
+		KjJedis<Jedis> jedis0 = new KjJedis<Jedis>(new JedisSentinelPool("master",
+				Sets.newHashSet("10.200.142.34:26381", "10.200.142.32:26381"), "wwfsjr_test"));
+		KjJedis<Jedis> jedis1 = new KjJedis<Jedis>(new JedisSentinelPool("master",
+				Sets.newHashSet("10.200.142.34:26387", "10.200.142.32:26387"), "eQLABUKW"));
 		GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 		config.setMinIdle(-1);
 		config.setMaxTotal(100);
 		config.setMaxWaitMillis(30000);
 		List<JedisShardInfo> infos = Lists.newArrayList();
-		JedisShardInfo info = new JedisShardInfo("10.200.142.34",6387);
+		JedisShardInfo info = new JedisShardInfo("10.200.142.34", 6387);
 		info.setPassword("eQLABUKW");
 		infos.add(info);
-		KjJedis<ShardedJedis> jedis = new KjJedis<ShardedJedis>(new ShardedJedisPool(config,infos));
-			
-		int l1 = 10;
-		int l2 = 10000;
-		if(args.length == 2) {
-			l1 = Integer.parseInt(args[0]);
-			l2 = Integer.parseInt(args[1]);
-		}
-		
-		for(int i = 0;i < l1;l1++) {
-			long b = System.currentTimeMillis();
-			for (int j = 0; j < l2; j++) {
-				jedis.jedisCommands().incr("incr");
-			}
-			System.out.println(System.currentTimeMillis() - b);
+		info = new JedisShardInfo("10.200.142.32", 6381);
+		info.setPassword("wwfsjr_test");
+		infos.add(info);
+		KjJedis<ShardedJedis> jedis2 = new KjJedis<ShardedJedis>(new ShardedJedisPool(config, infos));
 
-			for (int j = 0; j < l2; j++) {
-				jedis.jedisCommands().lpush("queue", "queue" + i);
+		for (int k = 0; k < circle; k++) {
+			long b = System.currentTimeMillis();
+			ExecutorService service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				int j = i;
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis2.jedisCommands().lpush("TEST_QUEUE" + j % 10, value);
+					}
+				});
 			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis集群:写:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
 			b = System.currentTimeMillis();
-			for (int j = 0; j < l2; j++) {
-				jedis.jedisCommands().rpop("queue");
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				int j = i;
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis2.jedisCommands().rpop("TEST_QUEUE" + j % 10);
+					}
+				});
 			}
-			System.out.println(System.currentTimeMillis() - b);
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis集群:读:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				int j = i;
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis0.jedisCommands().lpush("TEST_QUEUE" + j % 10, value);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis0:写:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				int j = i;
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis0.jedisCommands().rpop("TEST_QUEUE" + j % 10);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis0:读:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				int j = i;
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis1.jedisCommands().lpush("TEST_QUEUE" + j % 10, value);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis1:写:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				int j = i;
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis1.jedisCommands().rpop("TEST_QUEUE" + j % 10);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis1:读:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis0.jedisCommands().lpush("TEST_QUEUE", value);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis0单队列:写:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis0.jedisCommands().rpop("TEST_QUEUE");
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis0单队列:读:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis1.jedisCommands().lpush("TEST_QUEUE", value);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis1单队列:写:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
+
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis1.jedisCommands().rpop("TEST_QUEUE");
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("redis1单队列:读:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
 		}
-		
+		System.exit(0);
 	}
 }
