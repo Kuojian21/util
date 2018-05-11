@@ -46,6 +46,13 @@ public class JedisTest {
 		infos.add(info);
 		KjJedis<ShardedJedis> jedis2 = new KjJedis<ShardedJedis>(new ShardedJedisPool(config, infos));
 
+		jedis0.jedisCommands().del("TEST_QUEUE");
+		jedis1.jedisCommands().del("TEST_QUEUE");
+		for(int i = 0 ;i < 10;i++) {
+			jedis0.jedisCommands().del("TEST_QUEUE" + i);
+			jedis1.jedisCommands().del("TEST_QUEUE" + i);
+		}
+		
 		for (int k = 0; k < circle; k++) {
 			long b = System.currentTimeMillis();
 			ExecutorService service = Executors.newFixedThreadPool(100);
