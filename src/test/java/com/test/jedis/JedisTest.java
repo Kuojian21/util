@@ -48,11 +48,17 @@ public class JedisTest {
 
 		jedis0.jedisCommands().del("TEST_QUEUE");
 		jedis1.jedisCommands().del("TEST_QUEUE");
-		for(int i = 0 ;i < 10;i++) {
+		for (int i = 0; i < 10; i++) {
 			jedis0.jedisCommands().del("TEST_QUEUE" + i);
 			jedis1.jedisCommands().del("TEST_QUEUE" + i);
 		}
-		
+
+		jedis1.jedisCommands().del("TEST_SET");
+		for (int i = 0; i < 2000; i++) {
+			jedis1.jedisCommands().zadd("TEST_SET", TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + i,
+					"184688.SZ|博时新兴成长混合型证券投资基金" + i);
+		}
+
 		for (int k = 0; k < circle; k++) {
 			long b = System.currentTimeMillis();
 			ExecutorService service = Executors.newFixedThreadPool(100);
@@ -84,6 +90,21 @@ public class JedisTest {
 			service.awaitTermination(10, TimeUnit.MINUTES);
 			System.out.println("redis集群:读:" + k + ":" + tasks + ":" + value + ":" + (System.currentTimeMillis() - b));
 
+			b = System.currentTimeMillis();
+			service = Executors.newFixedThreadPool(100);
+			for (int i = 0; i < tasks; i++) {
+				service.submit(new Runnable() {
+					@Override
+					public void run() {
+						jedis1.jedisCommands().zrevrange("TEST_SET", 0, 19);
+					}
+				});
+			}
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println(
+					"redis1:读:" + k + ":" + tasks + ":2000:184688.SZ|博时新兴成长混合型证券投资基金:" + (System.currentTimeMillis() - b));
+			
 			b = System.currentTimeMillis();
 			service = Executors.newFixedThreadPool(100);
 			for (int i = 0; i < tasks; i++) {
