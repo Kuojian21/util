@@ -5,6 +5,7 @@ import java.util.Random;
 import com.java.kj.netty.KjClient;
 
 public class ClientTest {
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		KjClient client = new KjClient(1, "127.0.0.1", 8888);
 		for (int i = 0; i < 10; i++) {

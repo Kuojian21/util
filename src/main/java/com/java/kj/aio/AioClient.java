@@ -16,6 +16,9 @@ public class AioClient {
 			@Override
 			public void completed(Void result, Void attachment) {
 				write(channel,ByteBuffer.wrap(("1").getBytes()));
+				write(channel,ByteBuffer.wrap(("1").getBytes()));
+				write(channel,ByteBuffer.wrap(("1").getBytes()));
+				write(channel,ByteBuffer.wrap(("1").getBytes()));
 			}
 
 			@Override
