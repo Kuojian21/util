@@ -6,19 +6,11 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import com.google.common.collect.Maps;
+import java.util.concurrent.Semaphore;
 
 public class KjAioServer {
-	private final ConcurrentMap<Integer, Holder> holders = Maps.newConcurrentMap();
 	private final Action action;
 	private final AsynchronousServerSocketChannel server;
-	private final ExecutorService service = Executors.newFixedThreadPool(10);
 
 	private KjAioServer(int port, Action action) throws IOException {
 		this.action = action;
@@ -26,7 +18,7 @@ public class KjAioServer {
 		try {
 			server = AsynchronousServerSocketChannel.open();
 			server.bind(new InetSocketAddress(port));
-			server.accept(action, ACCEPT);
+			server.accept(null, ACCEPT);
 		} finally {
 			this.server = server;
 			if (this.server != null) {
@@ -37,7 +29,6 @@ public class KjAioServer {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						service.shutdown();
 					}
 				});
 			}
@@ -45,31 +36,32 @@ public class KjAioServer {
 	}
 
 	public static interface Action {
-		byte[] action(byte[] data);
+		void response(Holder holder,byte[] data);
 	}
 
-	static class Holder {
+	public static class Holder {
 		final AsynchronousSocketChannel channel;
 		final ByteBuffer reader;
-		final Lock lock;
+		final Semaphore semaphore;
 
 		Holder(AsynchronousSocketChannel channel, int rsize) {
 			this.channel = channel;
 			this.reader = ByteBuffer.allocate(rsize);
-			this.lock = new ReentrantLock();
+			this.semaphore = new Semaphore(1);
 		}
 	}
 
-	private CompletionHandler<AsynchronousSocketChannel, Action> ACCEPT = new CompletionHandler<AsynchronousSocketChannel, Action>() {
+	private CompletionHandler<AsynchronousSocketChannel, Void> ACCEPT = new CompletionHandler<AsynchronousSocketChannel, Void>() {
 
 		@Override
-		public void completed(AsynchronousSocketChannel channel, Action attachment) {
+		public void completed(AsynchronousSocketChannel channel, Void attachment) {
+			KjAioServer.this.server.accept(null, ACCEPT);
 			Holder holder = new Holder(channel, 1024);
 			channel.read(holder.reader, holder, READER);
 		}
 
 		@Override
-		public void failed(Throwable exc, Action attachment) {
+		public void failed(Throwable exc, Void attachment) {
 
 		}
 
@@ -84,12 +76,8 @@ public class KjAioServer {
 			byte[] data = new byte[read.limit()];
 			read.get(data);
 			read.rewind();
-			service.submit(new Runnable() {
-				@Override
-				public void run() {
-					KjAioServer.this.send(attachment, KjAioServer.this.action.action(data));
-				}
-			});
+			KjAioServer.this.action.response(attachment, data);
+			attachment.channel.read(read, attachment, READER);
 		}
 
 		@Override
@@ -99,30 +87,19 @@ public class KjAioServer {
 
 	};
 
-	private CompletionHandler<Integer, Holder> WRITER = new CompletionHandler<Integer, Holder>() {
+	public CompletionHandler<Integer, Holder> WRITER = new CompletionHandler<Integer, Holder>() {
 
 		@Override
 		public void completed(Integer result, Holder attachment) {
-			attachment.lock.unlock();
+			attachment.semaphore.release();
 		}
 
 		@Override
 		public void failed(Throwable exc, Holder attachment) {
-			try {
-				attachment.channel.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				attachment.lock.unlock();
-			}
+
 		}
 
 	};
-
-	public void send(Holder holder, byte[] data) {
-		holder.lock.lock();
-		holder.channel.write(ByteBuffer.wrap(data), holder, WRITER);
-	}
 
 	public static KjAioServer bind(int port, Action action) {
 		try {
