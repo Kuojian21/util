@@ -2,7 +2,6 @@ package com.java.kj.nio;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -33,13 +32,14 @@ public class KjNio {
 									channel.configureBlocking(false);
 									Action action = (Action) key.attachment();
 									channel.register(KjNio.selector, SelectionKey.OP_READ,
-											new Holder(channel, action, 1024));
+											action);
 								} else if (key.isConnectable()) {
 									SocketChannel channel = (SocketChannel) key.channel();
 									channel.configureBlocking(false);
-									Action action = (Action) key.attachment();
+									Holder holder = (Holder) key.attachment();
 									channel.register(KjNio.selector, SelectionKey.OP_READ,
-											new Holder(channel, action, 1024));
+											holder);
+									holder.semaphore.release();
 								} else if (key.isReadable()) {
 									SocketChannel channel = (SocketChannel) key.channel();
 									Holder holder = (Holder) key.attachment();
@@ -53,11 +53,9 @@ public class KjNio {
 									holder.semaphore.release();
 								}
 								iterator.remove();
-							} catch (ClosedChannelException e) {
+							} catch (Exception e) {
 								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+							} 
 						}
 					}
 				}
@@ -72,20 +70,23 @@ public class KjNio {
 	}
 
 	public static interface Action {
-		void handle(Holder holder);
+		void handle(Holder holder) throws Exception;
 	}
 
 	public static class Holder {
 		final SocketChannel channel;
-		final Action action;
-		final ByteBuffer reader;
 		final Semaphore semaphore;
 		ByteBuffer writer;
+		Action action;
 
-		Holder(SocketChannel channel, Action action, int rsize) {
+		Holder(SocketChannel channel){
+			this.channel = channel;
+			this.semaphore = new Semaphore(1);
+		}
+		
+		Holder(SocketChannel channel, Action action) {
 			this.channel = channel;
 			this.action = action;
-			this.reader = ByteBuffer.allocate(rsize);
 			this.semaphore = new Semaphore(1);
 		}
 	}
