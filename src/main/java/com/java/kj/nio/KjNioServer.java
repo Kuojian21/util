@@ -10,12 +10,12 @@ public class KjNioServer extends KjNio{
 
 	private ServerSocketChannel server;
 
-	private KjNioServer(int port, Action action) throws IOException {
+	private KjNioServer(int port, Handle handle) throws IOException {
 		try {
 			server = ServerSocketChannel.open();  
 	        server.configureBlocking(false);  
 	        server.socket().bind(new InetSocketAddress(port));
-	        server.register(selector, SelectionKey.OP_ACCEPT); 
+	        server.register(selector, SelectionKey.OP_ACCEPT,handle); 
 		} finally {
 			if (this.server != null) {
 				Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -30,10 +30,24 @@ public class KjNioServer extends KjNio{
 			}
 		}
 	}
+	
+	private class ServerHandle implements Handle{
 
-	public static KjNioServer bind(int port, Action action) {
+		@Override
+		public void read(Holder holder) throws Exception {
+			
+		}
+
+		@Override
+		public void write(Holder holder) throws Exception {
+			
+		}
+		
+	}
+
+	public static KjNioServer bind(int port, Handle handle) {
 		try {
-			return new KjNioServer(port, action);
+			return new KjNioServer(port, handle);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

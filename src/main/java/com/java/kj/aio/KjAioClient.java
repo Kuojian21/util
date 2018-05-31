@@ -131,14 +131,12 @@ public class KjAioClient {
 	}
 
 	public byte[] request(byte[] request) {
-
 		this.request(new Action() {
 			@Override
 			public void request(Holder holder) throws Exception {
 				holder.semaphore.acquire();
 				holder.channel.write(ByteBuffer.wrap(request), holder, WRITER);
 			}
-
 		});
 		return null;
 	}

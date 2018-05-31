@@ -30,32 +30,28 @@ public class KjNio {
 									server.register(KjNio.selector, SelectionKey.OP_ACCEPT);
 									SocketChannel channel = server.accept();
 									channel.configureBlocking(false);
-									Action action = (Action) key.attachment();
-									channel.register(KjNio.selector, SelectionKey.OP_READ,
-											action);
+									Handle handle = (Handle) key.attachment();
+									channel.register(KjNio.selector, SelectionKey.OP_READ, new Holder(channel, handle));
 								} else if (key.isConnectable()) {
 									SocketChannel channel = (SocketChannel) key.channel();
 									channel.configureBlocking(false);
 									Holder holder = (Holder) key.attachment();
-									channel.register(KjNio.selector, SelectionKey.OP_READ,
-											holder);
+									channel.register(KjNio.selector, SelectionKey.OP_READ, holder);
 									holder.semaphore.release();
 								} else if (key.isReadable()) {
 									SocketChannel channel = (SocketChannel) key.channel();
 									Holder holder = (Holder) key.attachment();
-									holder.action.handle(holder);
+									holder.handle.read(holder);
 									channel.register(KjNio.selector, SelectionKey.OP_READ, holder);
 								} else if (key.isWritable()) {
-									SocketChannel channel = (SocketChannel) key.channel();
 									Holder holder = (Holder) key.attachment();
-									channel.write(holder.writer);
-									holder.writer = null;
+									holder.handle.write(holder);
 									holder.semaphore.release();
 								}
 								iterator.remove();
 							} catch (Exception e) {
 								e.printStackTrace();
-							} 
+							}
 						}
 					}
 				}
@@ -69,24 +65,26 @@ public class KjNio {
 		}
 	}
 
-	public static interface Action {
-		void handle(Holder holder) throws Exception;
+	public static interface Handle {
+		void read(Holder holder) throws Exception;
+
+		void write(Holder holder) throws Exception;
 	}
 
 	public static class Holder {
 		final SocketChannel channel;
 		final Semaphore semaphore;
 		ByteBuffer writer;
-		Action action;
+		Handle handle;
 
-		Holder(SocketChannel channel){
+		Holder(SocketChannel channel) {
 			this.channel = channel;
 			this.semaphore = new Semaphore(1);
 		}
-		
-		Holder(SocketChannel channel, Action action) {
+
+		Holder(SocketChannel channel, Handle handle) {
 			this.channel = channel;
-			this.action = action;
+			this.handle = handle;
 			this.semaphore = new Semaphore(1);
 		}
 	}

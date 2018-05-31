@@ -57,11 +57,16 @@ public class KjNioClient extends KjNio {
 		});
 	}
 
-	public void request(Action action) {
+	
+	public static interface Request{
+		void request(Holder holder) throws Exception;
+	}
+	
+	public void request(Request request) {
 		Holder holder = null;
 		try {
 			holder = pool.borrowObject();
-			action.handle(holder);
+			request.request(holder);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -72,14 +77,13 @@ public class KjNioClient extends KjNio {
 	}
 
 	public byte[] request(byte[] request) {
-		this.request(new Action() {
+		this.request(new Request() {
 			@Override
-			public void handle(Holder holder) throws Exception {
+			public void request(Holder holder) throws Exception {
 				holder.semaphore.acquire();
 				holder.writer = ByteBuffer.wrap(request);
-				holder.channel.register(KjNio.selector, SelectionKey.OP_WRITE, holder);
+				holder.channel.register(KjNio.selector, SelectionKey.OP_WRITE);
 			}
-
 		});
 		return null;
 	}
