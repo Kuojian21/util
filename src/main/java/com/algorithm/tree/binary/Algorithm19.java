@@ -33,8 +33,8 @@ public class Algorithm19 {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(new Algorithm19().fibonacci(10));
-		System.out.println(new Algorithm19().fibonacci1(10));
+		System.out.println(new Algorithm19().fibonacci(100));
+		System.out.println(new Algorithm19().fibonacci1(10000000));
 	}
 	
 }
