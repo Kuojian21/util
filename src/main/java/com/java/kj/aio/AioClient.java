@@ -20,7 +20,7 @@ public class AioClient {
 				write(channel,ByteBuffer.wrap(("1").getBytes()));
 				write(channel,ByteBuffer.wrap(("1").getBytes()));
 			}
-
+				
 			@Override
 			public void failed(Throwable exc, Void attachment) {
 				
