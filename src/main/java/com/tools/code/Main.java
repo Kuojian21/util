@@ -26,6 +26,7 @@ public class Main {
 
 	private Main() {
 
+		
 	}
 
 	public static void generate(Type[] types) {
