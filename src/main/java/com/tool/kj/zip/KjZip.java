@@ -11,23 +11,34 @@ import java.util.zip.ZipFile;
 
 public class KjZip {
 
-	public static void unzip(String srcFile, String tarPath) throws IOException {
-		File path = new File(tarPath);
-		if (!path.exists()) {
-			path.mkdirs();
+	public static interface Filter{
+		boolean filter(ZipEntry entry);
+	}
+	
+	public static void unzip(File src, File tar,Filter filter) throws IOException {
+		if(!src.exists()) {
+			return;
+		}
+		if (!tar.exists()) {
+			tar.mkdirs();
+		}
+		if(!tar.isDirectory()) {
+			return;
 		}
 		ZipFile file = null;
 		try {
-			file = new ZipFile(srcFile);
+			file = new ZipFile(src);
 			Enumeration<? extends ZipEntry> entries = file.entries();
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
-				File entryFile = new File(path.getAbsoluteFile() + File.separator + entry.getName());
+				if(!filter.filter(entry)) {
+					continue;
+				}
+				File entryFile = new File(tar.getAbsoluteFile() + File.separator + entry.getName());
 				if (entry.isDirectory()) {
 					entryFile.mkdirs();
 					continue;
 				}
-				System.out.println(entry.getName());
 				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(entryFile));
 				BufferedInputStream bis = new BufferedInputStream(file.getInputStream(entry));
 				byte[] buffer = new byte[1024];
