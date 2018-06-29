@@ -1,0 +1,21 @@
+upstream adsconsole-corp-kuaishou-default {
+  
+  server bjpg-rs1133.yz02:8080 weight=50;
+  server bjpg-rs1134.yz02:8080 weight=50;
+
+  keepalive 4096;
+  check interval=1000 rise=2 fall=1 timeout=5000 type=http default_down=false;
+  check_http_send "HEAD / HTTP/1.0\r\n\r\n";
+  check_http_expect_alive http_2xx http_3xx;
+}
+
+upstream adsconsole-corp-kuaishou-133 {
+  
+  server bjpg-rs1133.yz02:8080 weight=50;
+  server bjpg-rs1134.yz02:8080 backup;
+
+  keepalive 4096;
+  check interval=1000 rise=2 fall=1 timeout=5000 type=http default_down=false;
+  check_http_send "HEAD / HTTP/1.0\r\n\r\n";
+  check_http_expect_alive http_2xx http_3xx;
+}
