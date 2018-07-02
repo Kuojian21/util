@@ -14,7 +14,7 @@ public class ModelTest {
 			return;
 		}
 		MakeModel.mysql(new SimpleDriverDataSource(new Driver(),
-				args[0], args[1], args[2]),"oversea_ad_org_library");
+				args[0], args[1], args[2]),"tablename");
 		
 	}
 
