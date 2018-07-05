@@ -366,6 +366,12 @@
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0.3</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.11</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
@@ -391,17 +397,6 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-		<dependency>
-			<groupId>com.github.phantomthief</groupId>
-			<artifactId>buffer-trigger</artifactId>
-			<version>0.2.11</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/cn.wanghaomiao/JsoupXpath -->
 		<dependency>
 			<groupId>cn.wanghaomiao</groupId>
@@ -420,11 +415,30 @@
 			<artifactId>jaxws-api</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+
+		<!-- https://mvnrepository.com/artifact/com.github.phantomthief/scope -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.11</version>
+			<groupId>com.github.phantomthief</groupId>
+			<artifactId>scope</artifactId>
+			<version>1.0.7</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.phantomthief/buffer-trigger -->
+		<dependency>
+			<groupId>com.github.phantomthief</groupId>
+			<artifactId>buffer-trigger</artifactId>
+			<version>0.2.11</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.phantomthief/zkconfig-resources -->
+		<dependency>
+			<groupId>com.github.phantomthief</groupId>
+			<artifactId>zkconfig-resources</artifactId>
+			<version>1.1.22</version>
 		</dependency>
 
 	</dependencies>

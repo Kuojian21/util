@@ -15,7 +15,7 @@ public class ModelTest {
 		}
 		MakeModel.mysql(new SimpleDriverDataSource(new Driver(),
 				args[0], args[1], args[2]),"tablename");
-		
+		System.out.println("ddd".split(",").length);
 	}
 
 }
