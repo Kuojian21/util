@@ -1,13 +1,12 @@
 package com.tool.kj.model;
 
-public class Model {
+import java.util.List;
 
+import com.beust.jcommander.internal.Lists;
+
+public class Model {
 	private String name;
-	private String type;
-	private boolean nul;
-	private boolean primary;
-	private String def;
-	private String comment;
+	private List<Cell> cells = Lists.newArrayList();
 
 	public String getName() {
 		return name;
@@ -17,44 +16,17 @@ public class Model {
 		this.name = name;
 	}
 
-	public String getType() {
-		return type;
+	public List<Cell> getCells() {
+		return cells;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void addCell(Cell cell) {
+		this.cells.add(cell);
 	}
 
-	public boolean isNul() {
-		return nul;
+	public void setCells(List<Cell> cells) {
+		this.cells = cells;
 	}
-
-	public void setNul(boolean nul) {
-		this.nul = nul;
-	}
-
-	public boolean isPrimary() {
-		return primary;
-	}
-
-	public void setPrimary(boolean primary) {
-		this.primary = primary;
-	}
-
-	public String getDef() {
-		return def;
-	}
-
-	public void setDef(String def) {
-		this.def = def;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+	
 
 }

@@ -1,6 +1,7 @@
 package com.tool.kj.model;
 
 import java.sql.ResultSet;
+//import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,18 +16,23 @@ public class MakeModel {
 
 	public static void mysql(DataSource dataSource, String table) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		List<Model> models = jdbcTemplate.query("show full columns from " + table, new RowMapper<Model>() {
+		List<Cell> cells = jdbcTemplate.query("show full columns from " + table, new RowMapper<Cell>() {
 			@Override
-			public Model mapRow(ResultSet rs, int rowNum) throws SQLException {
-				/*
-				 * ResultSetMetaData rsmd = rs.getMetaData(); for (int i = 1; i <=
-				 * rsmd.getColumnCount(); i++) { System.out.println(rsmd.getColumnName(i) + "\t"
-				 * + rs.getObject(i)); }
-				 */
-				Model model = new Model();
+			public Cell mapRow(ResultSet rs, int rowNum) throws SQLException {
+				
+				
+//				ResultSetMetaData rsmd = rs.getMetaData();
+//				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+//					System.out.println(rsmd.getColumnName(i) + "\t" + rs.getObject(i));
+//				}
+				
+
+				Cell model = new Cell();
 				model.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, rs.getString("Field")));
-				if (rs.getString("Type").startsWith("bigint") || rs.getString("Type").startsWith("tinyint")) {
+				if (rs.getString("Type").startsWith("tinyint")) {
 					model.setType("Integer");
+				} else if (rs.getString("Type").startsWith("bigint")) {
+					model.setType("Long");
 				} else if (rs.getString("Type").startsWith("varchar")) {
 					model.setType("String");
 				}
@@ -38,14 +44,19 @@ public class MakeModel {
 				return model;
 			}
 		});
-		model(models);
+		Model model = new Model();
+		model.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, table));
+		model.setCells(cells);
+		model(model);
 	}
 
-	public static void model(List<Model> models) {
-		for (Model model : models) {
-			System.out.println("/*" + model.getComment() + "*/");
-			System.out.println("private " + model.getType() + " " + model.getName() + ";");
+	public static void model(Model model) {
+		System.out.println("public class " + model.getName() + "{");
+		for (Cell cell : model.getCells()) {
+			System.out.println("\t/*" + cell.getComment() + "*/");
+			System.out.println("\tprivate " + cell.getType() + " " + cell.getName() + ";");
 		}
+		System.out.println("}");
 	}
 
 }
