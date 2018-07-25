@@ -72,7 +72,7 @@ public class KjExecutorService {
 		 */
 		@Override
 		public void shutdown() {
-			if (shutdown.compareAndSet(false, true) && tasks.get() == 0) {
+			if (shutdown.compareAndSet(false, true) && taskCount.get() == 0) {
 				super.shutdown();
 			}
 		}
