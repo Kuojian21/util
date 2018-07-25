@@ -35,7 +35,7 @@ public class KjExecutorService {
 	/**
 	 * tasks count.
 	 */
-	private final AtomicInteger tasks = new AtomicInteger(0);
+	private final AtomicInteger taskCount = new AtomicInteger(0);
 	/**
 	 * shutdown flag.
 	 */
@@ -52,7 +52,7 @@ public class KjExecutorService {
 		 */
 		@Override
 		protected void beforeExecute(Thread t, Runnable r) {
-			tasks.incrementAndGet();
+			taskCount.incrementAndGet();
 		}
 
 		/**
@@ -61,7 +61,7 @@ public class KjExecutorService {
 		 */
 		@Override
 		protected void afterExecute(Runnable r, Throwable t) {
-			if (tasks.decrementAndGet() == 0 && shutdown.get()) {
+			if (taskCount.decrementAndGet() == 0 && shutdown.get()) {
 				super.shutdown();
 			}
 		}
