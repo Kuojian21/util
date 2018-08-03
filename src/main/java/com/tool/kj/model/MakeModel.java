@@ -1,6 +1,7 @@
 package com.tool.kj.model;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 //import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
@@ -19,21 +20,19 @@ public class MakeModel {
 		List<Cell> cells = jdbcTemplate.query("show full columns from " + table, new RowMapper<Cell>() {
 			@Override
 			public Cell mapRow(ResultSet rs, int rowNum) throws SQLException {
-				
-				
+
 //				ResultSetMetaData rsmd = rs.getMetaData();
 //				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 //					System.out.println(rsmd.getColumnName(i) + "\t" + rs.getObject(i));
 //				}
-				
 
 				Cell model = new Cell();
 				model.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, rs.getString("Field")));
-				if (rs.getString("Type").startsWith("tinyint")) {
+				if (rs.getString("Type").startsWith("tinyint") || rs.getString("Type").startsWith("int")) {
 					model.setType("Integer");
 				} else if (rs.getString("Type").startsWith("bigint")) {
 					model.setType("Long");
-				} else if (rs.getString("Type").startsWith("varchar")) {
+				} else if (rs.getString("Type").startsWith("varchar") || rs.getString("Type").endsWith("text")) {
 					model.setType("String");
 				}
 

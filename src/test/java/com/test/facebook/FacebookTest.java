@@ -1,5 +1,8 @@
 package com.test.facebook;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +18,13 @@ import com.facebook.ads.sdk.APIRequest;
 import com.facebook.ads.sdk.APIResponse;
 import com.facebook.ads.sdk.Ad;
 import com.facebook.ads.sdk.AdAccount;
+import com.facebook.ads.sdk.AdAccount.APIRequestCreateCampaign;
 import com.facebook.ads.sdk.AdCreative;
 import com.facebook.ads.sdk.AdSet;
 import com.facebook.ads.sdk.BatchRequest;
 import com.facebook.ads.sdk.Campaign;
 import com.google.common.base.Strings;
+import com.google.gson.JsonObject;
 
 public class FacebookTest {
 
@@ -40,7 +45,30 @@ public class FacebookTest {
 		System.out.println(result);
 	}
 
-	public static void main(String[] args) throws APIException {
+	public static void asyncBatch(AdAccount adAccount) throws NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, APIException {
+		List<Object> batch = Lists.newArrayList();
+		Method method = APIRequest.class.getDeclaredMethod("getBatchModeRequestInfo");
+		method.setAccessible(true);
+		for (int i = 0; i < 5; i++) {
+			APIRequestCreateCampaign request = adAccount.createCampaign().setName("test" + i)
+					.setObjective(Campaign.EnumObjective.VALUE_APP_INSTALLS)
+					.setStatus(Campaign.EnumStatus.VALUE_ACTIVE);
+			BatchRequest.BatchModeRequestInfo info = (BatchRequest.BatchModeRequestInfo) method.invoke(request,
+					new Object[] {});
+			JsonObject batchElement = new JsonObject();
+			batchElement.addProperty("method", info.method);
+			batchElement.addProperty("relative_url", info.relativeUrl);
+			batchElement.addProperty("name", "RequestCreative" + i);
+			batchElement.addProperty("body", info.body);
+			batch.add(batchElement);
+		}
+		adAccount.createAsyncBatchRequest().setAdbatch(batch).executeAsync();
+
+	}
+
+	public static void main(String[] args) throws APIException, NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (args.length < 2) {
 			return;
 		}
@@ -55,15 +83,30 @@ public class FacebookTest {
 		adCreative.setFieldId("");
 		System.out.println(Strings.isNullOrEmpty(adCreative.getId()));
 		APIContext context = new APIContext(args[0]);
+		System.out.println(new APIRequest<APINode>(context, "304490227015372", "/", "GET").execute());
+		Campaign campaign = Campaign.fetchById("23842903817110320", context);
+		System.out.println(campaign);
+
 		AdAccount adAccount = new AdAccount("1863152260418006", context);
+
+		
+		
+		
+		
+		System.out.println(AdAccount.fetchById("1038971129618045", context));
+		APIRequest<APINode> request = new APIRequest<APINode>(context, "me", "/adaccounts", "GET");
+		System.out.println(request.execute());
+
+		asyncBatch(adAccount);
+
 		APINodeList<Campaign> campaigns = adAccount.getCampaigns().requestAllFields().execute();
 		System.out.println(campaigns);
 
 		String[] campaignIds = new String[] { "23842960320830146", "23842960216170146" };
-		for(String campaignId : campaignIds) {
-			info(campaignId,context);
+		for (String campaignId : campaignIds) {
+			info(campaignId, context);
 		}
-		
+
 		// 23842960320830146
 		APINodeList<AdSet> adsets = Campaign.fetchById("23842960320830146", context).getAdSets().requestAllFields()
 				.execute();
@@ -73,7 +116,7 @@ public class FacebookTest {
 
 		System.out.println(AdCreative.fetchById("23842948931830762", context));
 
-		APIRequest<APINode> request = new APIRequest<>(context, "23842948931020762", "/", "GET");
+		request = new APIRequest<>(context, "23842948931020762", "/", "GET");
 		APIResponse res = request.execute();
 		System.out.println(res);
 
@@ -96,6 +139,8 @@ public class FacebookTest {
 		List<APIResponse> response = batch.execute();
 		adAccount.createAsyncAdRequestSet().setAdSpecs(adSpecs).addToBatch(batch).execute();
 		System.out.println(response);
+
+		adAccount.createAsyncBatchRequest().addToBatch(batch);
 
 		// BatchRequest request = new BatchRequest(context);
 		// for (int i = 1; i < args.length; i++) {

@@ -16,9 +16,10 @@ public class JSoupXpathTest {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException, XpathSyntaxErrorException {
 		String xpath = "//div[@class='groups-list-tree-container']/ul/li/div/div[3]/a/@href";
+		//String xpath = "//li[@class='project-row']/div/a/@href";
 
 		Set<String> sets = Sets.newHashSet();
-		for (File file : new File("/Users/kuojian21/repository/html").listFiles()) {
+		for (File file : new File("/Users/kuojian21/git/html").listFiles()) {
 			List<Object> objs = KjJSoupXpath.parse(new FileReader(file)).sel(xpath);
 			for (Object obj : objs) {
 				sets.add(obj.toString());

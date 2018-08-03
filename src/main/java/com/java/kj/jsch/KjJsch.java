@@ -17,7 +17,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
-public class KjJsch extends KjPool<ChannelSftp, Boolean> {
+public class KjJsch extends KjPool<ChannelSftp> {
 
 	private GenericObjectPool<ChannelSftp> pool;
 

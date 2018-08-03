@@ -478,6 +478,34 @@
 			<version>7.4.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.thrift/libthrift -->
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>0.11.0</version>
+			<!-- <type>pom</type> -->
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.grpc/grpc-all -->
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-all</artifactId>
+			<version>1.13.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.6.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.zeroc/ice -->
+		<dependency>
+			<groupId>com.zeroc</groupId>
+			<artifactId>ice</artifactId>
+			<version>3.7.1</version>
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>
@@ -533,6 +561,28 @@
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>0.5.0</version>
+				<configuration>
+					<!-- The version of protoc must match protobuf-java. If you don't depend 
+						on protobuf-java directly, you will be transitively depending on the protobuf-java 
+						version that grpc depends on. -->
+					<protocArtifact>com.google.protobuf:protoc:3.0.0-beta-2:exe:${os.detected.classifier}</protocArtifact>
+					<pluginId>grpc-java</pluginId>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:0.13.2:exe:${os.detected.classifier}</pluginArtifact>
+					<protocExecutable>/Users/peng/protoc-3.0.0-beta-2-osx-x86_64/protoc</protocExecutable>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>compile-custom</goal>
 						</goals>
 					</execution>
 				</executions>
