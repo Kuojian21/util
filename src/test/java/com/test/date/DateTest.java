@@ -18,7 +18,7 @@ public class DateTest {
 		// long beginTime = Instant.from()
 		// .toEpochMilli();
 		System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-		System.out.println(LocalDateTime.parse("20180724", DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+		System.out.println(LocalDateTime.parse("20180724000000", DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
 				.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 		// System.out.println(beginTime);
 

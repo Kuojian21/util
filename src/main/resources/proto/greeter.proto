@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.test.rpc.grpc";
+option java_outer_classname = "Greeter";
+package com.test.rpc.grpc;
+
+service Greeter {
+	rpc SayHelloSimple (HelloRequest) returns (HelloReply) {
+	}
+	rpc SayHelloServer (HelloRequest) returns (stream HelloReply) {
+	}
+	rpc SayHelloServer (stream HelloRequest) returns (HelloReply) {
+	}
+	rpc SayHelloChat (stream HelloRequest) returns (stream HelloReply) {
+	}
+}
+
+message HelloRequest {
+	string name = 1;
+}
+
+message HelloReply {
+	string message = 1;
+}

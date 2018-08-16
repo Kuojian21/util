@@ -37,26 +37,11 @@ public class KjSnowflake {
 				}
 			} else {
 				this.lastTimestamp = timestamp;
-				seq = this.sequence = 0;
+				this.sequence = 0;
 			}
 		}
 
 		return ((timestamp - IDEPOCH) << WORK_SEQ_BIT) | (this.workerId << SEQ_BIT) | seq;
 	}
 
-	public static void main(String[] args) {
-		KjSnowflake kjSnowflake = new KjSnowflake(0);
-		for (int i = 0; i < 10; i++) {
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					for (int j = 0; j < 10; j++) {
-						System.out.println(kjSnowflake.nextId());
-					}
-				}
-
-			}).start();
-		}
-	}
 }

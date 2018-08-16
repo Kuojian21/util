@@ -1,10 +1,12 @@
 package com.test.facebook;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.curator.shaded.com.google.common.collect.Maps;
 
@@ -15,6 +17,7 @@ import com.facebook.ads.sdk.APIException;
 import com.facebook.ads.sdk.APINode;
 import com.facebook.ads.sdk.APINodeList;
 import com.facebook.ads.sdk.APIRequest;
+import com.facebook.ads.sdk.APIRequest.IAsyncRequestExecutor;
 import com.facebook.ads.sdk.APIResponse;
 import com.facebook.ads.sdk.Ad;
 import com.facebook.ads.sdk.AdAccount;
@@ -24,13 +27,14 @@ import com.facebook.ads.sdk.AdSet;
 import com.facebook.ads.sdk.BatchRequest;
 import com.facebook.ads.sdk.Campaign;
 import com.google.common.base.Strings;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.JsonObject;
 
 public class FacebookTest {
 
-	public static void info(String campaignId, APIContext context) throws APIException {
+	public static void info(APIContext context) throws APIException {
 		Map<String, Object> result = Maps.newHashMap();
-		Campaign campaign = Campaign.fetchById("23842960320830146", context);
+		Campaign campaign = Campaign.fetchById("23842915793690575", context);
 		// System.out.println(campaign);
 		AdSet adset = campaign.getAdSets().requestAllFields().execute().get(0);
 		// System.out.println(adset);
@@ -42,11 +46,12 @@ public class FacebookTest {
 		result.put("adset", adset);
 		result.put("ad", ad);
 		result.put("adCreatives", adCreatives);
-		System.out.println(result);
+		System.out.println(JSON.toJSONString(result));
 	}
 
-	public static void asyncBatch(AdAccount adAccount) throws NoSuchMethodException, SecurityException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException, APIException {
+	public static void asyncBatch(AdAccount adAccount)
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, APIException, InterruptedException, ExecutionException {
 		List<Object> batch = Lists.newArrayList();
 		Method method = APIRequest.class.getDeclaredMethod("getBatchModeRequestInfo");
 		method.setAccessible(true);
@@ -63,12 +68,14 @@ public class FacebookTest {
 			batchElement.addProperty("body", info.body);
 			batch.add(batchElement);
 		}
-		adAccount.createAsyncBatchRequest().setAdbatch(batch).executeAsync();
-
+		APIRequest.changeAsyncRequestExecutor(new com.facebook.ads.sdk.APIRequest.DefaultAsyncRequestExecutor());
+		ListenableFuture<APIResponse> future = adAccount.createAsyncBatchRequest().setAdbatch(batch).executeAsyncBase();
+		System.out.println(future.get());
 	}
 
-	public static void main(String[] args) throws APIException, NoSuchMethodException, SecurityException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static void main(String[] args)
+			throws APIException, NoSuchMethodException, SecurityException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, InterruptedException, ExecutionException {
 		if (args.length < 2) {
 			return;
 		}
@@ -83,6 +90,9 @@ public class FacebookTest {
 		adCreative.setFieldId("");
 		System.out.println(Strings.isNullOrEmpty(adCreative.getId()));
 		APIContext context = new APIContext(args[0]);
+		System.out.println(AdSet.fetchById("23842915793710575", context));
+		System.out.println(AdSet.fetchById("23842915827060575", context));
+		info(context);
 		System.out.println(new APIRequest<APINode>(context, "304490227015372", "/", "GET").execute());
 		Campaign campaign = Campaign.fetchById("23842903817110320", context);
 		System.out.println(campaign);
@@ -90,9 +100,10 @@ public class FacebookTest {
 		AdAccount adAccount = new AdAccount("1863152260418006", context);
 
 		
-		
-		
-		
+		asyncBatch(adAccount);
+
+		adAccount.getCampaigns();
+
 		System.out.println(AdAccount.fetchById("1038971129618045", context));
 		APIRequest<APINode> request = new APIRequest<APINode>(context, "me", "/adaccounts", "GET");
 		System.out.println(request.execute());
@@ -104,7 +115,7 @@ public class FacebookTest {
 
 		String[] campaignIds = new String[] { "23842960320830146", "23842960216170146" };
 		for (String campaignId : campaignIds) {
-			info(campaignId, context);
+//			info(campaignId, context);
 		}
 
 		// 23842960320830146

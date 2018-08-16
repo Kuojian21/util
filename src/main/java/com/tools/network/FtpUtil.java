@@ -33,7 +33,7 @@ public class FtpUtil {
 
 	public static void uploadFtp(FTPClient ftpClient, InputStream is, String directory, String file, boolean ftpclose,
 			boolean isclose) {
-		String module = "上传";
+		String module = "查询";
 		try {
 			String root = ftpClient.printWorkingDirectory();
 			FtpUtil.changeDir(ftpClient, directory);
