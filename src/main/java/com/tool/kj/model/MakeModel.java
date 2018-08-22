@@ -1,7 +1,7 @@
 package com.tool.kj.model;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+//import java.sql.ResultSetMetaData;
 //import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
